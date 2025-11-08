@@ -1,0 +1,674 @@
+{
+	"info": {
+		"_postman_id": "4986b7b3-354f-48db-a083-96fdf052c961",
+		"name": "agroco-backend",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "44759851",
+		"_collection_link": "https://cristian-9229743.postman.co/workspace/Finanzas~d3ac4eac-0c9d-4fd0-81a1-862d3bbf9d6f/collection/44759851-4986b7b3-354f-48db-a083-96fdf052c961?action=share&source=collection_link&creator=44759851"
+	},
+	"item": [
+		{
+			"name": "Registro",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const res = pm.response.json();\r",
+							"pm.environment.set('documento', res.documento);\r",
+							"pm.environment.set('email', res.email ?? '');\r",
+							"pm.environment.set('api_token', res.api_token);\r",
+							"pm.environment.set('email_verified_at', res.email_verified_at ?? '');\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "aplication/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "aplication/json ",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"nombre_completo\": \"Brayan Alexander Torres Puentes\",\r\n  \"documento_identidad\": \"1076904351\",\r\n  \"ocupacion\": \"Trabajador\",\r\n  \"email\": \"Brayan_torrespu@fet.edu.co\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/v1/register",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "aplication/json ",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "aplication/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"nombre_completo\": \"Brayan Alexander Torres Puentes\",\r\n  \"documento_identidad\": \"1076904351\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/v1/login",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "VerPerfil",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"Accept: application/json\r",
+							"Content-Type: application/json\r",
+							"Authorization: Bearer <token>\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer 3|k5hsp9vZ2ExsZuoDAfl8opEDkysQc0XPPt7XAJJ6e541cc92",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/v1/me",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Logout",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer 1|qtEhXdFKAkdXGZtoa3JURB4oZ4DiyhblI6XZRdSQa7d88c8e",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/v1/logout",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear lote",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const res = pm.response.json();\r",
+							"pm.environment.set('lot_id', res.data.id);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer 3|k5hsp9vZ2ExsZuoDAfl8opEDkysQc0XPPt7XAJJ6e541cc92",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Puertas del sol\",\r\n  \"area_ha\": 16.5,\r\n  \"crop\": \"arroz\",\r\n  \"location\": {\r\n    \"departamento\": \"Huila\",\r\n    \"municipio\": \"Neiva\",\r\n    \"vereda\": \"Norte\",\r\n    \"lat\": 4.05,\r\n    \"lng\": -73.6\r\n  },\r\n  \"sowing_date\": \"2025-08-15\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/v1/lots",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"lots"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Listado",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer 3|k5hsp9vZ2ExsZuoDAfl8opEDkysQc0XPPt7XAJJ6e541cc92",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/v1/lots",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"lots"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ver Lote especifico",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer 3|k5hsp9vZ2ExsZuoDAfl8opEDkysQc0XPPt7XAJJ6e541cc92",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/v1/lots/{{lot_id}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"lots",
+						"{{lot_id}}"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Eliminar lote",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer 1|TffanFkFQcXNPRmrLwVEVs93ePXmOf7KIB7oigBJ5f4fc1af",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/v1/lots/{{lot_id}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"lots",
+						"{{lot_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear análisis de suelo (manual)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer 3|k5hsp9vZ2ExsZuoDAfl8opEDkysQc0XPPt7XAJJ6e541cc92",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"sampled_at\": \"2025-07-10\",\r\n  \"yield_target_t_ha\": 8,\r\n  \"p_mgkg\": 18,\r\n  \"k_cmol\": 0.30,\r\n  \"ca_cmol\": 5.2,\r\n  \"mg_cmol\": 1.8,\r\n  \"s_mgkg\": 11,\r\n  \"b_mgkg\": 0.24,\r\n  \"fe_mgkg\": 45,\r\n  \"mn_mgkg\": 6.5,\r\n  \"zn_mgkg\": 1.2,\r\n  \"cu_mgkg\": 0.7\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/v1/lots/7/soil-analyses",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"lots",
+						"7",
+						"soil-analyses"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Listado general de los analisis",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer 3|k5hsp9vZ2ExsZuoDAfl8opEDkysQc0XPPt7XAJJ6e541cc92",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/v1/soil-analyses",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"soil-analyses"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ver un analisis de suelo",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer 3|k5hsp9vZ2ExsZuoDAfl8opEDkysQc0XPPt7XAJJ6e541cc92",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/v1/soil-analyses/10",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"soil-analyses",
+						"10"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Generar y guardar plan (desde el análisis)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer 3|k5hsp9vZ2ExsZuoDAfl8opEDkysQc0XPPt7XAJJ6e541cc92",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/v1/soil-analyses/10/plan/generate",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"soil-analyses",
+						"10",
+						"plan",
+						"generate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Descargar PDF",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{plan_download_url}}",
+					"host": [
+						"{{plan_download_url}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Listar LOTES con análisis (y con plan dentro de cada análisis)",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer 1|VyZ12fmMI42D5D0UbINgW7Ok8cfpusrezuLXMh1tf1b91698",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/v1/lots?include=analyses,plan",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"lots"
+					],
+					"query": [
+						{
+							"key": "include",
+							"value": "analyses,plan"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CHAT BOT",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer 1|VyZ12fmMI42D5D0UbINgW7Ok8cfpusrezuLXMh1tf1b91698",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"message\": \"¿Como funciona este sistema?\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/v1/assistant/chat",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"assistant",
+						"chat"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"value": ""
+		},
+		{
+			"value": ""
+		}
+	]
+}

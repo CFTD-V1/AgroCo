@@ -1,0 +1,17 @@
+      <div class="chat-header chat-header--agro">
+        <div class="chat-header-title">Asistente Virtual Agro</div>
+        <div class="chat-brand" aria-hidden="true"><img src="assets/GranoDeArrozSaludando.webp" alt="" width="30" height="22" /></div>
+        <button type="button" class="chat-move" (click)="switchSide()" aria-label="Mover chat">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M15 5l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+            <path d="M9 19l-5-5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+          </svg>
+        </button>
+        <button type="button" class="chat-close" (click)="closePanel()" aria-label="Minimizar chat">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="chat-body" #body aria-live="polite">
+        <div *ngFor="let m of messages()" class="msg" [ngClass]="m.role">
+          <span>{{ m.text }}</span>
+          <small *ngIf="m.timestamp" class="msg-time">{{ m.timestamp | date:'shortTime' }}</small>

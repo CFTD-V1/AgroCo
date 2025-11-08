@@ -1,0 +1,63 @@
+/* Overrides desactivados para permitir collage en el encabezado del desplegable */
+
+/* Chatbot mascot position tweak: closer to bottom-right */
+.chat-mascot-btn { bottom: 12px !important; inset-inline-end: 12px !important; }
+@media (max-width: 420px){ .chat-mascot-btn { bottom: 8px !important; inset-inline-end: 8px !important; } }
+/* Chat body background image */
+.chat-panel .chat-body{ background: url('assets/FondoChatBot.png') center / cover no-repeat; position: relative; padding-left: 0; padding-right: 8px; }
+.chat-panel .chat-body::before{ content:''; position:absolute; inset:0; background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(0,0,0,0.18)); pointer-events:none; }
+
+/* Agro theme: panel + header */
+.chat-panel{ border-radius: 18px; overflow: hidden; box-shadow: 0 24px 60px rgba(18,53,36,0.28); border: 1px solid rgba(21,62,41,0.20); }
+.chat-header--agro{ background: linear-gradient(135deg, #2f8f3d, #1f5f3a); color:#fff; }
+.chat-header--agro{ display:flex; align-items:center; gap:8px; padding-inline: 8px; }
+.chat-header--agro .chat-header-title{ font-family: 'Outfit', system-ui, sans-serif; font-weight: 900; letter-spacing: .2px; flex:1; text-align:center; }
+.chat-header--agro .chat-brand img{ display:block; width:28px; height:28px; }
+.chat-header--agro .chat-move, .chat-header--agro .chat-close{ color:#ffffff; opacity:.95 }
+.chat-header--agro .chat-move:hover, .chat-header--agro .chat-close:hover{ opacity: 1 }
+
+/* Bubbles */
+.chat-body .msg{ border-radius: 16px; padding: 10px 12px; line-height: 1.35; box-shadow: 0 14px 30px rgba(0,0,0,0.18); display:inline-block; max-width: 80%; margin: 6px 8px; }
+.chat-body .msg.user{ background: linear-gradient(135deg, #2f8f3d, #1f5f3a); color:#fff; }
+.chat-body .msg.bot{ background: rgba(18,53,36,0.86); color:#e9f5ee; border: 1px solid rgba(61,141,64,0.28); }
+.chat-body .msg.user{ margin-inline-start: 0; margin-inline-end: 0; }
+.chat-body .msg.bot{ margin-inline-start: 0; margin-inline-end: 0; }
+.chat-body .msg-row{ display:flex; align-items:flex-end; gap:8px; margin: 6px 8px; }
+/* Usuario a la derecha, bot a la izquierda */
+.chat-body .msg-row.user{ justify-content:flex-end; flex-direction: row; gap: 6px; margin-right: 4px; }
+.chat-body .msg-row.user .msg{ order: 2; }
+.chat-body .msg-row.user .avatar{ order: 1; }
+.chat-body .msg.user{ margin-inline-end: 0; }
+.chat-body .msg-row.bot{ justify-content:flex-start; margin-left: 0; gap: 2px; }
+.chat-body .msg-row .avatar{ width:56px; height:56px; flex:0 0 56px; border-radius:50%; object-fit:cover; box-shadow: none; border: none; margin-left: 0; }
+.chat-body .msg-row.bot .avatar{ margin-left: -10px; }
+.chat-body .msg .msg-text{ display:block; margin-bottom: 4px; }
+.chat-body .msg .msg-meta{ display:inline-flex; align-items:center; gap:6px; opacity:.8; float: right; }
+.chat-body .msg .msg-time{ opacity:.75 }
+
+/* WhatsApp-like checks */
+.chat-body .msg .checks{ display:inline-flex; align-items:center; gap:0; color: rgba(255,255,255,0.75); margin-left: 6px; }
+.chat-body .msg .checks .check{ display:inline-block; width:18px; height:18px; }
+/* acercar aún más los dos checks */
+.chat-body .msg .checks .two{ margin-left: -10px; }
+.chat-body .msg .checks.sent .two{ display:none; }
+.chat-body .msg .checks.sending{ opacity:.6 }
+.chat-body .msg .checks.delivered{ color: rgba(255,255,255,0.75); }
+.chat-body .msg .checks.seen{ color: #34b7f1; }
+
+/* Suggestions */
+.chat-suggestions{ background: rgba(255,255,255,0.06); border-top: 1px solid rgba(21,62,41,0.15); }
+.chat-suggestions-title{ color:#e9f5ee; font-weight:800 }
+.chat-suggestions button{ background: rgba(255,255,255,0.85); border: 1px solid rgba(21,62,41,0.15); color:#1f3526; border-radius: 10px; }
+.chat-suggestions button:hover{ filter: brightness(0.98); }
+
+/* Input */
+.chat-input{ background: rgba(255,255,255,0.06); border-top: 1px solid rgba(21,62,41,0.15); }
+.chat-input .input{ border-radius: 999px; box-shadow: inset 0 0 0 2px rgba(47,143,61,0.45); }
+.chat-input .input:focus{ box-shadow: inset 0 0 0 2px rgba(47,143,61,0.75); }
+.chat-input .btn{ background: linear-gradient(135deg, #2f8f3d, #1f5f3a); color:#fff; border-radius: 12px; }
+
+/* Clear button style */
+.chat-header--agro .chat-clear{ color:#fff; opacity:.95 }
+.chat-header--agro .chat-clear:hover{ opacity:1 }
+

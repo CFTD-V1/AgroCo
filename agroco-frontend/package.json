@@ -1,0 +1,51 @@
+{
+  "name": "agroco-frontend",
+  "version": "0.0.0",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test",
+    "build:prod": "ng build --configuration production",
+    "android:sync": "npm run build:prod && npx cap copy",
+    "android:open": "npx cap open android",
+    "android:run": "npm run build:prod && npx cap copy && npx cap open android",
+    "android:sync:all": "npm run build:prod && npx cap sync",
+    "android:gradle:clean": "cd android && .\\gradlew.bat clean",
+    "android:build:apk": "npm run build:prod && npx cap copy && cd android && .\\gradlew.bat assembleDebug",
+    "android:build:aab": "npm run build:prod && npx cap copy && cd android && .\\gradlew.bat bundleRelease",
+    "android:build:apk:posix": "npm run build:prod && npx cap copy && (cd android && ./gradlew assembleDebug)",
+    "android:build:aab:posix": "npm run build:prod && npx cap copy && (cd android && ./gradlew bundleRelease)"
+  },
+  "private": true,
+  "dependencies": {
+    "@angular/animations": "^18.2.0",
+    "@angular/common": "^18.2.0",
+    "@angular/compiler": "^18.2.0",
+    "@angular/core": "^18.2.0",
+    "@angular/forms": "^18.2.0",
+    "@angular/platform-browser": "^18.2.0",
+    "@angular/platform-browser-dynamic": "^18.2.0",
+    "@angular/router": "^18.2.0",
+    "@capacitor/android": "^7.4.4",
+    "@capacitor/cli": "^7.4.4",
+    "@capacitor/core": "^7.4.4",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0",
+    "zone.js": "~0.14.10"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^18.2.21",
+    "@angular/cli": "^18.2.21",
+    "@angular/compiler-cli": "^18.2.0",
+    "@types/jasmine": "~5.1.0",
+    "jasmine-core": "~5.2.0",
+    "karma": "~6.4.0",
+    "karma-chrome-launcher": "~3.2.0",
+    "karma-coverage": "~2.2.0",
+    "karma-jasmine": "~5.1.0",
+    "karma-jasmine-html-reporter": "~2.1.0",
+    "typescript": "~5.5.2"
+  }
+}

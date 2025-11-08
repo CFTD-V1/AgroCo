@@ -1,0 +1,4 @@
+include ':app'
+// Carga el settings de Capacitor directamente desde node_modules (ruta portable)
+apply from: 'capacitor.settings.gradle'
+

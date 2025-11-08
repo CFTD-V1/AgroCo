@@ -1,0 +1,25 @@
+﻿{
+  "id": "b9a4f6c4-0a76-4a45-8ab2-4b8f503b7c0c",
+  "name": "Agroco Backend Local",
+  "values": [
+    { "key": "baseUrl", "value": "http://localhost", "enabled": true },
+    { "key": "register_full_name", "value": "Maria Fernanda Lopez Ramirez", "enabled": true },
+    { "key": "register_document", "value": "{{$timestamp}}", "enabled": true },
+    { "key": "register_occupation", "value": "Ingeniera agronoma", "enabled": true },
+    { "key": "register_email", "value": "usuario{{$randomInt}}@example.com", "enabled": true },
+    { "key": "user_full_name", "value": "Maria Fernanda Lopez Ramirez", "enabled": true },
+    { "key": "documento_identidad", "value": "", "enabled": true },
+    { "key": "user_password", "value": "", "enabled": true },
+    { "key": "temporary_password", "value": "", "enabled": true },
+    { "key": "new_password", "value": "Segura123!", "enabled": true },
+    { "key": "auth_token", "value": "", "enabled": true },
+    { "key": "lot_id", "value": "", "enabled": true },
+    { "key": "soil_analysis_id", "value": "", "enabled": true },
+    { "key": "plan_download_url", "value": "", "enabled": true },
+    { "key": "random_lot_suffix", "value": "{{$randomInt}}", "enabled": true },
+    { "key": "sowing_date", "value": "2024-05-01", "enabled": true }
+  ],
+  "_postman_variable_scope": "environment",
+  "_postman_exported_at": "2025-10-10T12:00:00.000Z",
+  "_postman_exported_using": "Postman/11.18.0"
+}

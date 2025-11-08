@@ -1,0 +1,268 @@
+import { Component, ElementRef, HostListener, ViewChild, computed, effect, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { AuthService } from '../services/auth.service';
+import { ApiService } from '../services/api.service';
+
+type ChatMsg = { role: 'user' | 'bot'; text: string; timestamp?: string; error?: boolean };
+type ChatHistoryItem = { role: string; message: string; created_at?: string };
+
+@Component({
+  selector: 'app-chat-widget',
+  standalone: true,
+  imports: [CommonModule, FormsModule],
+  template: `
+    <div
+      *ngIf="open()"
+      class="chat-panel"
+      #panel
+      [ngClass]="position()"
+      role="dialog"
+      aria-label="Asistente virtual Agro"
+      aria-modal="true"
+      tabindex="-1"
+      (keydown)="onPanelKeydown($event)"
+    >
+      <div class="chat-header chat-header--agro">
+        <div class="chat-header-title">Asistente Virtual Agro</div>
+        
+        
+        <button type="button" class="chat-close" (click)="closePanel()" aria-label="Minimizar chat">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="chat-body" #body aria-live="polite">
+        <div *ngFor="let m of messages()" class="msg" [ngClass]="m.role">
+          <span>{{ m.text }}</span>
+          <small *ngIf="m.timestamp" class="msg-time">{{ m.timestamp | date:'shortTime' }}</small>
+        </div>
+        <div *ngIf="busy()" class="msg bot typing">Escribiendo…</div>
+        <div class="chat-guest-hint" *ngIf="!canChat()">Inicia sesión o regístrate para enviar mensajes.</div>
+      </div>
+      <div class="chat-status" *ngIf="status()">{{ status() }}</div>
+      <div class="chat-input">
+        <input
+          #messageInput
+          class="input"
+          [(ngModel)]="input"
+          [disabled]="busy() || !canChat()"
+          [attr.aria-disabled]="busy() || !canChat() ? true : null"
+          [placeholder]="canChat() ? 'Escribe tu mensaje…' : 'Debes iniciar sesión para escribir'"
+          (keyup.enter)="send()"
+        />
+        <button class="btn" type="button" (click)="send()" [disabled]="busy() || !input.trim() || !canChat()">Enviar</button>
+      </div>
+    </div>
+    <button
+      *ngIf="canChat()"
+      #toggleBtn
+      class="chat-mascot-btn"
+      [ngClass]="position()"
+      aria-label="Abrir chat con Agro"
+      (click)="toggle()"
+      [attr.aria-pressed]="open()"
+      [attr.aria-expanded]="open()"
+    >
+      <img [src]="open() ? 'assets/GranoDeArroz.webp' : 'assets/GranoDeArrozCentado.webp'" alt="Agro - asistente" class="mascot-img" />
+    </button>
+  `
+})
+export class ChatWidgetComponent {
+  @ViewChild('body') body?: ElementRef<HTMLDivElement>;
+  @ViewChild('panel') panel?: ElementRef<HTMLDivElement>;
+  @ViewChild('messageInput') messageInput?: ElementRef<HTMLInputElement>;
+  @ViewChild('toggleBtn') toggleBtn?: ElementRef<HTMLButtonElement>;
+
+  open = signal(false);
+  busy = signal(false);
+  position = signal<'right' | 'left'>('right');
+  messages = signal<ChatMsg[]>(this.defaultGreeting());
+  suggestions = signal<string[]>([]);
+  status = signal<string | null>(null);
+  input = '';
+  private storageKeyRef: string | null = null;
+
+  canChat = computed(() => !!this.auth.token());
+  userName = computed(() => this.auth.user()?.nombre_completo ?? 'Invitado');
+
+  constructor(public auth: AuthService, private api: ApiService) {
+    effect(() => {
+      // Vuelve a cargar el historial cuando cambia el usuario
+      this.auth.user();
+      this.restoreHistory();
+    }, { allowSignalWrites: true });
+
+    effect(() => {
+      const snapshot = this.messages();
+      this.persistHistory(snapshot);
+      queueMicrotask(() => this.scrollToBottom());
+    });
+
+    effect(() => {
+      if (!this.canChat() && this.open()) {
+        this.open.set(false);
+      }
+    }, { allowSignalWrites: true });
+  }
+
+  toggle() {
+    const next = !this.open();
+    this.open.set(next);
+    if (next) {
+      this.resetConversation();
+      setTimeout(() => this.focusPanel(), 0);
+    } else {
+      this.returnFocus();
+    }
+  }
+
+  closePanel() {
+    if (this.open()) {
+      this.toggle();
+    }
+  }
+
+  switchSide() {
+    this.position.set(this.position() === 'right' ? 'left' : 'right');
+  }
+
+  async send() {
+    if (!this.canChat()) {
+      this.status.set('Debes iniciar sesión para conversar con el asistente.');
+      return;
+    }
+    if (!this.input.trim() || this.busy()) return;
+
+    const text = this.input.trim();
+    this.input = '';
+    this.status.set(null);
+    this.messages.update(arr => [...arr, { role: 'user', text, timestamp: new Date().toISOString() }]);
+    this.busy.set(true);
+
+    try {
+      const res = await this.api.post<any>('/api/v1/assistant/chat', { message: text }, true);
+      const reply = this.sanitizeReply(res?.message ?? '...');
+      this.hydrateHistory(res?.history, reply);
+      this.suggestions.set([]);
+    } catch (error: any) {
+      const message = error?.error?.message || 'Lo siento, hubo un problema. Inténtalo de nuevo.';
+      this.status.set(message);
+      this.input = text;
+      this.messages.update(arr => [...arr, { role: 'bot', text: message, error: true }]);
+    } finally {
+      this.busy.set(false);
+    }
+  }
+
+  applySuggestion(text: string) {
+    this.input = text;
+    this.send();
+  }
+
+  private sanitizeReply(text: string): string {
+    if (!text) return '';
+    // Quita cualquier bloque que empiece por "Tip para ti:" hasta el final
+    const trimmed = text.replace(/Tip\s*para\s*ti[:\.]?[\s\S]*$/i, '').trim();
+    // Limpia líneas vacías sobrantes
+    return trimmed
+      .split(/\r?\n/)
+      .map(l => l.trim())
+      .filter(l => l.length > 0)
+      .join('\n');
+  }
+
+  private hydrateHistory(_history: ChatHistoryItem[] | undefined, fallback: string) {
+    // Ignora cualquier historial del backend y solo agrega la respuesta actual
+    this.messages.update(arr => [
+      ...arr,
+      { role: 'bot', text: fallback, timestamp: new Date().toISOString() }
+    ]);
+  }
+
+  private defaultGreeting(): ChatMsg[] {
+  return [{ role: 'bot', text: 'Hola, estoy listo para ayudarte con tus lotes, analisis o planes.', timestamp: new Date().toISOString() }];
+}
+
+  private storageKey(): string {
+    const userId = this.auth.user()?.id;
+    return `agroco_chat_${userId ?? 'invitado'}`;
+  }
+
+  private restoreHistory() {
+  const key = this.storageKey();
+  this.storageKeyRef = key;
+  try { localStorage.removeItem(key); } catch {} 
+  this.resetConversation();
+}
+  private persistHistory(history: ChatMsg[]) { return; }
+
+  private focusPanel() {
+    this.panel?.nativeElement.focus();
+    setTimeout(() => this.messageInput?.nativeElement.focus(), 50);
+  }
+
+  private returnFocus() {
+    this.toggleBtn?.nativeElement.focus();
+  }
+  private resetConversation() {
+    this.messages.set(this.defaultGreeting());
+    this.suggestions.set([]);
+    this.status.set(null);
+  }
+
+  private scrollToBottom() {
+    const el = this.body?.nativeElement;
+    if (!el) return;
+    el.scrollTop = el.scrollHeight;
+  }
+
+  @HostListener('document:keydown', ['$event'])
+  handleGlobalKeydown(event: KeyboardEvent) {
+    if (event.key === 'Escape' && this.open()) {
+      event.preventDefault();
+      this.closePanel();
+    }
+  }
+
+  onPanelKeydown(event: KeyboardEvent) {
+    if (event.key !== 'Tab' || !this.open()) return;
+    const focusable = this.getFocusableElements();
+    if (!focusable.length) return;
+
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    const active = document.activeElement as HTMLElement | null;
+
+    if (event.shiftKey) {
+      if (active === first) {
+        event.preventDefault();
+        last.focus();
+      }
+    } else if (active === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  }
+
+  private getFocusableElements(): HTMLElement[] {
+    if (!this.panel) return [];
+    return Array.from(
+      this.panel.nativeElement.querySelectorAll<HTMLElement>(
+        'button, [href], input, textarea, select, [tabindex]:not([tabindex="-1"])'
+      )
+    ).filter(el => !el.hasAttribute('disabled'));
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">AgroCo</string>
+    <string name="title_activity_main">AgroCo</string>
+    <string name="package_name">com.agroco.app</string>
+    <string name="custom_url_scheme">com.agroco.app</string>
+</resources>

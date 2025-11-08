@@ -1,0 +1,39 @@
+/* Overrides desactivados para permitir collage en el encabezado del desplegable */
+
+/* Chatbot mascot position tweak: closer to bottom-right */
+.chat-mascot-btn { bottom: 12px !important; inset-inline-end: 12px !important; }
+@media (max-width: 420px){ .chat-mascot-btn { bottom: 8px !important; inset-inline-end: 8px !important; } }
+/* Chat body background image */
+.chat-panel .chat-body{ background: url('assets/FondoChatBot.png') center / cover no-repeat; position: relative; }
+.chat-panel .chat-body::before{ content:''; position:absolute; inset:0; background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(0,0,0,0.18)); pointer-events:none; }
+
+/* Agro theme: panel + header */
+.chat-panel{ border-radius: 18px; overflow: hidden; box-shadow: 0 24px 60px rgba(18,53,36,0.28); border: 1px solid rgba(21,62,41,0.20); }
+.chat-header--agro{ background: linear-gradient(135deg, #2f8f3d, #1f5f3a); color:#fff; }
+.chat-header--agro .chat-header-title{ font-family: 'Outfit', system-ui, sans-serif; font-weight: 900; letter-spacing: .2px; }
+.chat-header--agro .chat-move, .chat-header--agro .chat-close{ color:#ffffff; opacity:.95 }
+.chat-header--agro .chat-move:hover, .chat-header--agro .chat-close:hover{ opacity: 1 }
+
+/* Bubbles */
+.chat-body .msg{ border-radius: 16px; padding: 10px 12px; line-height: 1.35; box-shadow: 0 14px 30px rgba(0,0,0,0.18); }
+.chat-body .msg.user{ background: linear-gradient(135deg, #2f8f3d, #1f5f3a); color:#fff; }
+.chat-body .msg.bot{ background: rgba(18,53,36,0.86); color:#e9f5ee; border: 1px solid rgba(61,141,64,0.28); }
+.chat-body .msg .msg-time{ opacity:.75 }
+
+/* Suggestions */
+.chat-suggestions{ background: rgba(255,255,255,0.06); border-top: 1px solid rgba(21,62,41,0.15); }
+.chat-suggestions-title{ color:#e9f5ee; font-weight:800 }
+.chat-suggestions button{ background: rgba(255,255,255,0.85); border: 1px solid rgba(21,62,41,0.15); color:#1f3526; border-radius: 10px; }
+.chat-suggestions button:hover{ filter: brightness(0.98); }
+
+/* Input */
+.chat-input{ background: rgba(255,255,255,0.06); border-top: 1px solid rgba(21,62,41,0.15); }
+.chat-input .input{ border-radius: 999px; box-shadow: inset 0 0 0 2px rgba(47,143,61,0.45); }
+.chat-input .input:focus{ box-shadow: inset 0 0 0 2px rgba(47,143,61,0.75); }
+.chat-input .btn{ background: linear-gradient(135deg, #2f8f3d, #1f5f3a); color:#fff; border-radius: 12px; }
+
+/* Clear button style */
+.chat-header--agro .chat-clear{ color:#fff; opacity:.95 }
+.chat-header--agro .chat-clear:hover{ opacity:1 }
+
+
