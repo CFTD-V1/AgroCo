@@ -5,6 +5,7 @@ import { RegisterPageComponent } from './pages/register-page.component';
 import { LotsPageComponent } from './pages/lots-page.component';
 import { AnalysesPageComponent } from './pages/analyses-page.component';
 import { AnalysisDetailPageComponent } from './pages/analysis-detail-page.component';
+import { LotsCreatedPageComponent } from './pages/lots-created-page.component';
 import { RiceRequirementsPageComponent } from './pages/rice-requirements-page.component';
 import { ProfilePageComponent } from './pages/profile-page.component';
 import { authGuard } from './guards/auth.guard';
@@ -15,6 +16,7 @@ export const routes: Routes = [
   { path: 'login', component: LoginPageComponent, canActivate: [guestGuard] },
   { path: 'register', component: RegisterPageComponent, canActivate: [guestGuard] },
   { path: 'lots', component: LotsPageComponent, canActivate: [authGuard] },
+  { path: 'lots-created', component: LotsCreatedPageComponent, canActivate: [authGuard] },
   { path: 'analyses', component: AnalysesPageComponent, canActivate: [authGuard] },
   { path: 'analyses/:id', component: AnalysisDetailPageComponent, canActivate: [authGuard] },
   { path: 'rice', component: RiceRequirementsPageComponent },

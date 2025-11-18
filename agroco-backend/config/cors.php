@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 return [
 
@@ -19,18 +19,18 @@ return [
 
     'allowed_methods' => ['*'],
 
-    // Permitir frontend local (Angular dev) y Capacitor Android
+    // Permitir frontend local (Angular dev), mÃ³vil y Capacitor Android
     'allowed_origins' => [
         'capacitor://localhost',
         'http://localhost',
+        'http://localhost:4200',
         'http://127.0.0.1',
         'http://10.0.2.2',
+        'http://192.168.1.18:4200',
     ],
 
     // Aceptar cualquier puerto en localhost/10.0.2.2
-    'allowed_origins_patterns' => [
-        '/^http:\/\/(localhost|127\\.0\\.0\\.1|10\\.0\\.2\\.2)(?::\\d+)?$/',
-    ],
+    'allowed_origins_patterns' => [],
 
     'allowed_headers' => ['*'],
 

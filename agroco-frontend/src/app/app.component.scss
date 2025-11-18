@@ -1,4 +1,4 @@
-:host { display: block; }
+﻿:host { display: block; }
 
 .topbar {
   position: sticky;
@@ -7,8 +7,10 @@
   backdrop-filter: blur(10px);
   background: #ffffff;
   border-bottom: 1px solid rgba(0,0,0,0.06);
-  /* Sombra oscura para mayor separación */
+  /* Sombra oscura para mayor separaciÃ³n */
   box-shadow: 0 10px 24px rgba(0,0,0,0.12);
+  /* Respeto del notch/cámara en móviles */
+  padding-top: calc(env(safe-area-inset-top, 0px) + 8px);
 }
 
 .topbar-inner {
@@ -160,7 +162,26 @@
 
 .topbar-info app-topbar-chip { flex-shrink: 0; }
 
-.main { padding-top: 12px; padding-bottom: 12px; }
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  margin-right: 8px;
+  border-radius: 999px;
+  border: 0;
+  background: rgba(255,255,255,0.95);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+  color: #153e29;
+  cursor: pointer;
+}
+
+.main {
+  padding-top: 0;
+  padding-bottom: 0;
+  background: linear-gradient(180deg, var(--app-bg-1), var(--app-bg-2));
+}
 .main.auth-route { padding-top: 0 !important; margin-top: 0 !important; }
 .container.main.auth-route {
   max-width: 100% !important;
@@ -171,3 +192,8 @@
   padding-bottom: 0 !important;
   margin: 0 !important;
 }
+
+:host ::ng-deep body {
+  background: linear-gradient(180deg, var(--app-bg-1), var(--app-bg-2)) !important;
+}
+

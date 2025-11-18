@@ -68,8 +68,17 @@ export class AuthService {
   async updatePhoto(file: File) {
     const form = new FormData();
     form.append('photo', file);
-    await this.api.post('/api/v1/profile/photo', form as any, true);
+    const res = await this.api.post<{ avatar_url?: string }>('/api/v1/profile/photo', form as any, true);
+    // Refrescar usuario desde backend
     await this.me();
+    // Asegurar que el avatar_url quede actualizado aunque el backend no lo envíe
+    const current = this._user();
+    if (current) {
+      const base = (this.api.base || '').replace(/\/api\/?$/, '');
+      const fallback = base ? `${base}/api/v1/avatar/${current.id}?v=${Date.now()}` : current.avatar_url;
+      const finalUrl = res?.avatar_url || fallback || undefined;
+      this._user.set({ ...current, avatar_url: finalUrl });
+    }
   }
 
   private async me() {

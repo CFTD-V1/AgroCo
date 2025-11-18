@@ -8,7 +8,8 @@ import { RouterLink } from '@angular/router';
 import { ApiService } from '../services/api.service';
 import { AuthService } from '../services/auth.service';
 
-type Lot = { id: number; nombre: string; area_ha: number; cultivo: string; fecha_siembra?: string | null; analisis_suelo_total?: number };
+type LotLocation = { dept?: string; muni?: string; vereda?: string; lat?: number; lng?: number };
+type Lot = { id: number; nombre: string; area_ha: number; cultivo: string; fecha_siembra?: string | null; analisis_suelo_total?: number; ubicacion?: LotLocation | null };
 
 @Component({
   standalone: true,
@@ -41,8 +42,8 @@ type Lot = { id: number; nombre: string; area_ha: number; cultivo: string; fecha
     .stat{ background: rgba(255,255,255,0.92); backdrop-filter: blur(3px); border-radius:16px; padding:12px 16px; min-width: 160px; box-shadow: 0 12px 24px rgba(0,0,0,0.22); }
     .stat .label{ color:#153e29; font-weight:800; font-size:14px; }
     .stat .value{ color:#153e29; font-weight:900; font-size:24px; }
-    .hero-actions{ display:flex; gap:12px; justify-content:center; margin-top:14px; flex-wrap: wrap; }
-    .btn-hero{ border:none; border-radius:14px; padding:12px 16px; font-weight:800; cursor:pointer; font-size:14px; font-family: 'Outfit', system-ui, sans-serif; letter-spacing: .2px; }
+    .hero-actions{ display:flex; gap:16px; justify-content:center; margin-top:18px; flex-wrap: nowrap; }
+    .btn-hero{ border:none; border-radius:20px; padding:16px 24px; min-width:180px; font-weight:800; cursor:pointer; font-size:16px; font-family: 'Outfit', system-ui, sans-serif; letter-spacing: .24px; }
     .btn-orange{ background: linear-gradient(135deg, #f59e0b, #d97706); color:#ffffff; }
     .btn-green{ background: linear-gradient(135deg, #2f8f3d, #1f5f3a); color:#fff; }
     @media(max-width:720px){ .hero-card{ min-height: 360px; } .hero-title{ font-size:26px } .stat{ min-width: 140px } }
@@ -130,6 +131,8 @@ type Lot = { id: number; nombre: string; area_ha: number; cultivo: string; fecha
     .lot-info{ display:flex; flex-direction:column; gap:6px; }
     .lot-name{ font-weight:900; color:#153e29; letter-spacing:.2px; font-size:18px }
     .lot-meta{ color:#335f47; font-size:14.5px }
+    .lot-location{ color:#4b6a59; font-size:13px }
+    .lot-sowing{ color:#4b6a59; font-size:13px }
     .lot-actions{ display:flex; gap:8px }
     .lot-actions .icon-btn{ width:44px; height:44px; border-radius:14px; border:1px solid rgba(21,62,41,0.18); background:#f8fbf9; color:#1f5f3a; box-shadow: 0 4px 10px rgba(0,0,0,0.06); transition: filter .15s ease }
     .lot-actions .icon-btn:hover{ filter: brightness(1.03) }
@@ -195,11 +198,31 @@ type Lot = { id: number; nombre: string; area_ha: number; cultivo: string; fecha
           <input class="input input-inner" [(ngModel)]="form.name" name="name" placeholder="Ej: Lote La Esperanza" required />
         </div>
         <div class="col">
-          <label>Area (ha)</label>
-          <input class="input input-inner" type="number" step="0.01" [(ngModel)]="form.area_ha" name="area" placeholder="Ej: 12.5" required />
+          <label>Área</label>
+          <div class="input-group">
+            <input class="input-inner" type="number" step="0.01" [(ngModel)]="form.area_ha" name="area" [placeholder]="form.area_unit === 'm2' ? 'Ej: 2500' : 'Ej: 12.5'" required />
+            <select class="input-inner select" [(ngModel)]="form.area_unit" name="area_unit">
+              <option value="ha">ha</option>
+              <option value="m2">m²</option>
+            </select>
+          </div>
         </div>
       </div>
       <div class="row">
+        <div class="col">
+          <label>Departamento</label>
+          <input class="input input-inner" [(ngModel)]="form.dept" name="dept" placeholder="Ej: Tolima" />
+        </div>
+        <div class="col">
+          <label>Municipio</label>
+          <input class="input input-inner" [(ngModel)]="form.muni" name="muni" placeholder="Ej: Ibagué" />
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <label>Vereda (opcional)</label>
+          <input class="input input-inner" [(ngModel)]="form.vereda" name="vereda" placeholder="Ej: La Esperanza" />
+        </div>
         <div class="col">
           <label>Fecha de siembra (opcional)</label>
           <input class="input input-inner" type="date" [(ngModel)]="form.sowing_date" name="sowing" />
@@ -220,8 +243,12 @@ type Lot = { id: number; nombre: string; area_ha: number; cultivo: string; fecha
         <div class="lot-item" *ngFor="let l of lots()">
           <div class="lot-info">
             <div class="lot-name">{{ l.nombre | titlecase }}</div>
-            <div class="lot-meta">{{ l.area_ha }} ha - {{ l.cultivo | titlecase }}<span *ngIf="l.fecha_siembra"> - Siembra: {{ l.fecha_siembra }}</span></div>
-            <span class="pill-tag">Analisis vinculados: {{ l.analisis_suelo_total || 0 }}</span>
+            <div class="lot-meta">{{ l.area_ha }} ha - {{ l.cultivo | titlecase }}</div>
+            <div class="lot-location" *ngIf="l.ubicacion as loc">
+              {{ loc.dept }}<span *ngIf="loc.muni">, {{ loc.muni }}</span><span *ngIf="loc.vereda"> - {{ loc.vereda }}</span>
+            </div>
+            <div class="lot-sowing" *ngIf="l.fecha_siembra">Siembra: {{ l.fecha_siembra }}</div>
+            <span class="pill-tag">Análisis vinculados: {{ l.analisis_suelo_total || 0 }}</span>
           </div>
           <div class="lot-actions">
             <button class="icon-btn" type="button" title="Editar" (click)="onEdit(l)">
@@ -248,7 +275,7 @@ export class LotsPageComponent implements OnInit {
   loading = signal(false);
   error = signal<string | null>(null);
   editing = signal<Lot | null>(null);
-  form = { name: '', area_ha: '', crop: 'arroz', sowing_date: '' } as any;
+  form = { name: '', area_ha: '', area_unit: 'ha', dept: '', muni: '', vereda: '', crop: 'arroz', sowing_date: '' } as any;
   totalAnalyses = computed(() => this.lots().reduce((acc, lot) => acc + (lot.analisis_suelo_total || 0), 0));
 
   // (Solo creación de lotes en esta vista)
@@ -275,6 +302,11 @@ export class LotsPageComponent implements OnInit {
     let created = false;
     try {
       const payload: any = { name: this.form.name, area_ha: Number(this.form.area_ha), crop: this.form.crop };
+      const location: LotLocation = {};
+      if (this.form.dept?.trim()) location.dept = this.form.dept.trim();
+      if (this.form.muni?.trim()) location.muni = this.form.muni.trim();
+      if (this.form.vereda?.trim()) location.vereda = this.form.vereda.trim();
+      if (Object.keys(location).length) payload.location = location;
       if (this.form.sowing_date) payload.sowing_date = this.form.sowing_date;
       if (this.editing()) {
         await this.api.put(`/api/v1/lots/${this.editing()!.id}`, payload, true);
@@ -282,7 +314,7 @@ export class LotsPageComponent implements OnInit {
         await this.api.post(`/api/v1/lots`, payload, true);
         created = true;
       }
-      this.form = { name: '', area_ha: '', crop: 'arroz', sowing_date: '' };
+      this.form = { name: '', area_ha: '', area_unit: 'ha', dept: '', muni: '', vereda: '', crop: 'arroz', sowing_date: '' };
       this.editing.set(null);
       await this.load();
       if (created) {
@@ -304,7 +336,19 @@ export class LotsPageComponent implements OnInit {
 
   onEdit(lot: Lot) {
     this.editing.set(lot);
-    this.form = { name: lot.nombre, area_ha: String(lot.area_ha), crop: lot.cultivo || 'arroz', sowing_date: lot.fecha_siembra || '' };
+    const loc: LotLocation | null | undefined = (lot as any).ubicacion;
+    this.form = {
+      name: lot.nombre,
+      area_ha: String(lot.area_ha),
+      area_unit: 'ha',
+      dept: loc?.dept ?? '',
+      muni: loc?.muni ?? '',
+      vereda: loc?.vereda ?? '',
+      crop: lot.cultivo || 'arroz',
+      sowing_date: lot.fecha_siembra || ''
+    };
+    // Al editar, abrir y enfocar directamente el formulario
+    this.scrollToForm();
   }
 
   async onDelete(lot: Lot) {
@@ -314,7 +358,7 @@ export class LotsPageComponent implements OnInit {
     catch (e: any) { this.error.set(e?.message || 'No se pudo eliminar el lote'); }
   }
 
-  cancel() { this.editing.set(null); this.form = { name: '', area_ha: '', crop: 'arroz', sowing_date: '' }; }
+  cancel() { this.editing.set(null); this.form = { name: '', area_ha: '', area_unit: 'ha', dept: '', muni: '', vereda: '', crop: 'arroz', sowing_date: '' }; }
 
   scrollToForm() {
     try {
@@ -340,6 +384,7 @@ export class LotsPageComponent implements OnInit {
 
   // (Método de análisis removido: esta vista solo crea lotes)
 }
+
 
 
 

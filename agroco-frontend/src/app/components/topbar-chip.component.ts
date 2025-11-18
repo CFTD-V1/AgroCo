@@ -10,10 +10,17 @@ import { AuthService } from '../services/auth.service';
     <ng-container *ngIf="auth.token(); else guest">
       <div class="topbar-chip topbar-chip--icon-only" aria-label="Perfil de usuario">
         <span class="topbar-chip__icon">
-          <img *ngIf="auth.user()?.avatar_url && !imgError" [src]="auth.user()!.avatar_url!" alt="" (error)="imgError=true" />
-          <span *ngIf="!auth.user()?.avatar_url || imgError" class="avatar-initials">{{ initials(auth.user()?.nombre_completo) }}</span>
+          <img
+            *ngIf="auth.user()?.avatar_url"
+            [src]="auth.user()!.avatar_url!"
+            alt="Foto de perfil"
+            (error)="imgError=true"
+            (load)="imgError=false"
+          />
+          <span *ngIf="!auth.user()?.avatar_url || imgError" class="avatar-initials">
+            {{ initials(auth.user()?.nombre_completo) }}
+          </span>
         </span>
-        
       </div>
     </ng-container>
     <ng-template #guest>

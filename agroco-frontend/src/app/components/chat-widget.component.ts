@@ -21,6 +21,7 @@ type ChatHistoryItem = { role: string; message: string; created_at?: string };
     <div
       *ngIf="open()"
       class="chat-panel"
+      style="height: 420px; max-height: calc(100vh - 140px);"
       #panel
       [ngClass]="position()"
       role="dialog"

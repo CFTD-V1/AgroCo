@@ -22,14 +22,18 @@ type Analysis = { id: number; lote_id: number; meta_rendimiento_t_ha: number | n
       </div>
     </section>
 
-    <section class="ana-section">
-      <details class="ana-acc-card">
+    <div class="hero-actions hero-actions--below">
+      <button type="button" class="btn" (click)="scrollTo('crear-analisis')">Crear análisis</button>
+    </div>
+
+    <section class="ana-section" id="crear-analisis">
+      <details class="ana-acc-card" id="create-analysis-acc">
         <summary class="ana-acc-hero"><div class="acc-hero-center"><h3 class="acc-hero-title">Crea tu análisis</h3></div></summary>
         <div class="acc-content">
           <div class="floating-layers">
-        <form class="form-shell" (ngSubmit)="onCreate()">
+        <form class="form-shell" (ngSubmit)="onCreate(); toggleAfterCreate()">
           <div class="form-title">Nuevo análisis</div>
-          <div class="form-sub">Selecciona el lote y define el objetivo de rendimiento.</div>
+          <div class="form-sub">Selecciona el lote y define el objetivo de recolección de grano.</div>
           <div class="row">
             <div class="col step">
               <label>Lote</label>
@@ -43,25 +47,25 @@ type Analysis = { id: number; lote_id: number; meta_rendimiento_t_ha: number | n
               <input class="input" type="date" [(ngModel)]="form.sampled_at" name="sampled_at" />
             </div>
             <div class="col step" *ngIf="form.sampled_at">
-              <label>Objetivo (t/ha)</label>
+              <label>Objetivo de recolección (t/ha)</label>
               <input class="input" type="number" step="0.1" min="4" max="12" [(ngModel)]="form.yield_target_t_ha" name="yield" required />
             </div>
           </div>
           <div class="row" *ngIf="form.lotId && form.sampled_at">
-            <div class="col"><label>P (mg/kg)</label><input class="input" type="number" [(ngModel)]="form.p_mgkg" name="p" /></div>
-            <div class="col"><label>K (cmol/kg)</label><input class="input" type="number" [(ngModel)]="form.k_cmol" name="k" /></div>
-            <div class="col"><label>Ca (cmol/kg)</label><input class="input" type="number" [(ngModel)]="form.ca_cmol" name="ca" /></div>
-            <div class="col"><label>Mg (cmol/kg)</label><input class="input" type="number" [(ngModel)]="form.mg_cmol" name="mg" /></div>
-            <div class="col"><label>S (mg/kg)</label><input class="input" type="number" [(ngModel)]="form.s_mgkg" name="s" /></div>
+            <div class="col"><label>P – Fósforo (mg/kg)</label><input class="input" type="number" [(ngModel)]="form.p_mgkg" name="p" /></div>
+            <div class="col"><label>K – Potasio (cmol/kg)</label><input class="input" type="number" [(ngModel)]="form.k_cmol" name="k" /></div>
+            <div class="col"><label>Ca – Calcio (cmol/kg)</label><input class="input" type="number" [(ngModel)]="form.ca_cmol" name="ca" /></div>
+            <div class="col"><label>Mg – Magnesio (cmol/kg)</label><input class="input" type="number" [(ngModel)]="form.mg_cmol" name="mg" /></div>
+            <div class="col"><label>S – Azufre (mg/kg)</label><input class="input" type="number" [(ngModel)]="form.s_mgkg" name="s" /></div>
           </div>
           <div class="row" *ngIf="form.lotId && form.sampled_at">
-            <div class="col"><label>B (mg/kg)</label><input class="input" type="number" step="0.01" [(ngModel)]="form.b_mgkg" name="b_mgkg" /></div>
-            <div class="col"><label>Fe (mg/kg)</label><input class="input" type="number" [(ngModel)]="form.fe_mgkg" name="fe_mgkg" /></div>
-            <div class="col"><label>Mn (mg/kg)</label><input class="input" type="number" [(ngModel)]="form.mn_mgkg" name="mn_mgkg" /></div>
+            <div class="col"><label>B – Boro (mg/kg)</label><input class="input" type="number" step="0.01" [(ngModel)]="form.b_mgkg" name="b_mgkg" /></div>
+            <div class="col"><label>Fe – Hierro (mg/kg)</label><input class="input" type="number" [(ngModel)]="form.fe_mgkg" name="fe_mgkg" /></div>
+            <div class="col"><label>Mn – Manganeso (mg/kg)</label><input class="input" type="number" [(ngModel)]="form.mn_mgkg" name="mn_mgkg" /></div>
           </div>
           <div class="row" *ngIf="form.lotId && form.sampled_at">
-            <div class="col"><label>Zn (mg/kg)</label><input class="input" type="number" step="0.01" [(ngModel)]="form.zn_mgkg" name="zn_mgkg" /></div>
-            <div class="col"><label>Cu (mg/kg)</label><input class="input" type="number" [(ngModel)]="form.cu_mgkg" name="cu_mgkg" /></div>
+            <div class="col"><label>Zn – Zinc (mg/kg)</label><input class="input" type="number" step="0.01" [(ngModel)]="form.zn_mgkg" name="zn_mgkg" /></div>
+            <div class="col"><label>Cu – Cobre (mg/kg)</label><input class="input" type="number" [(ngModel)]="form.cu_mgkg" name="cu_mgkg" /></div>
           </div>
           <div *ngIf="error()" style="color:#d16969">{{ error() }}</div>
           <div class="row" style="justify-content:flex-start">
@@ -75,7 +79,7 @@ type Analysis = { id: number; lote_id: number; meta_rendimiento_t_ha: number | n
 
     <!-- Descargas (desplegable) -->
     <section class="section-grid" style="margin-top:16px">
-      <details class="download-acc">
+      <details class="download-acc" id="download-analysis-acc">
         <summary class="download-hero">
             <div class="download-hero__img">
             <div class="download-hero__label">Descargar análisis</div>
@@ -161,14 +165,65 @@ type Analysis = { id: number; lote_id: number; meta_rendimiento_t_ha: number | n
   `,
   styles: [`
     /* Hero card container with background image */
-    .hero-shell{ position:relative; background: url('/assets/4072378.jpg') center/cover no-repeat; border:none; border-radius:22px; overflow:hidden; box-shadow:0 18px 44px rgba(21,62,41,0.22); padding:24px; min-height: 400px; display:flex; align-items:center; justify-content:center; width: 100%; margin: 6px 0 0 0 }
+    .hero-shell{ position:relative; background: url('/assets/7867974.jpg') center/110% no-repeat; border:none; border-radius:22px; overflow:hidden; box-shadow:0 18px 44px rgba(21,62,41,0.22); padding:24px; min-height: 400px; display:flex; align-items:center; justify-content:center; width: 100%; margin: 6px 0 0 0 }
     .hero-shell::before{ content:''; position:absolute; inset:0; background: linear-gradient(180deg, rgba(0,0,0,0.32), rgba(0,0,0,0.62)); backdrop-filter: blur(1.5px); }
     .hero-shell > *{ position: relative; z-index: 1; }
     .hero-copy{ color:#fff; max-width: 760px; text-align:center; display:flex; flex-direction:column; align-items:center }
     .hero-copy .tagline{ display:inline-block; background: rgba(255,255,255,0.96); color:#153e29; border-radius:999px; padding:7px 14px; font-weight:900; margin:0 auto 12px; font-size:13px; box-shadow:0 6px 18px rgba(0,0,0,0.18) }
     .hero-copy .hero-title{ color:#ffffff; text-shadow: 0 2px 14px rgba(0,0,0,0.55); margin: 10px 0 10px; font-size: 36px; line-height: 1.18; font-weight: 900; letter-spacing:.2px }
-    .hero-copy .hero-subtitle{ color:#f1fffa; margin: 0; text-shadow: 0 2px 12px rgba(0,0,0,0.5); max-width: 52ch; font-weight:700; font-size:18px; line-height:1.45 }
-    @media (max-width: 720px){ .hero-shell{ min-height: 340px; padding:18px } .hero-copy .hero-title{ font-size: 30px } .hero-copy .hero-subtitle{ font-size:16px } }
+      .hero-copy .hero-subtitle{ color:#f1fffa; margin: 0; text-shadow: 0 2px 12px rgba(0,0,0,0.5); max-width: 52ch; font-weight:700; font-size:18px; line-height:1.45 }
+      .hero-actions{ margin-top:16px; display:flex; gap:12px; flex-wrap:wrap; justify-content:center }
+      .hero-actions--below{ padding:20px 0 8px; display:flex; justify-content:center; }
+      .hero-actions--below .btn{
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+        max-width: 420px;
+        border-radius: 999px;
+        padding: 16px 30px;
+        font-size: 18px;
+        font-weight: 900;
+        letter-spacing: .3px;
+        box-shadow: 0 18px 40px rgba(13,42,28,0.35);
+        background: linear-gradient(135deg,#2f8f3d,#1f5f3a);
+        color:#ffffff;
+      }
+      .hero-actions--below .btn::before{
+        content:'';
+        position:absolute;
+        inset:-14%;
+        background-image:
+          url('/assets/GranoDeArroz.webp'),
+          url('/assets/GranoDeArroz.webp'),
+          url('/assets/GranoDeArroz.webp');
+        background-size: 40px auto, 30px auto, 24px auto;
+        background-repeat:no-repeat;
+        background-position: 12% 140%, 52% 160%, 88% 135%;
+        opacity:0.35;
+        filter: drop-shadow(0 4px 8px rgba(0,0,0,0.25));
+        animation: riceFloat 12s linear infinite alternate;
+        pointer-events:none;
+      }
+      .hero-actions--below .btn::after{
+        content:'';
+        position:absolute;
+        inset:0;
+        background: linear-gradient(120deg, rgba(255,255,255,0.18), transparent 45%, rgba(255,255,255,0.10) 70%, transparent 100%);
+        mix-blend-mode: screen;
+        transform: translateX(-130%);
+        animation: shineSweep 6s ease-in-out infinite;
+        pointer-events:none;
+      }
+      @keyframes riceFloat{
+        from{ background-position: 10% 145%, 50% 165%, 90% 140%; }
+        to{ background-position: 0% 120%, 48% 140%, 100% 125%; }
+      }
+      @keyframes shineSweep{
+        0%, 40%{ transform: translateX(-130%); }
+        55%, 70%{ transform: translateX(130%); }
+        100%{ transform: translateX(130%); }
+      }
+      @media (max-width: 720px){ .hero-shell{ min-height: 340px; padding:18px } .hero-copy .hero-title{ font-size: 30px } .hero-copy .hero-subtitle{ font-size:16px } }
 
     /* Inner form card */
     .floating-layers{ background: rgba(255,255,255,0.98); border:none; border-radius: 0 0 16px 16px; box-shadow: none; padding:12px 14px 16px; margin-top: 0; }
@@ -178,9 +233,40 @@ type Analysis = { id: number; lote_id: number; meta_rendimiento_t_ha: number | n
     @media(min-width:720px){ .row{ grid-template-columns: repeat(2, 1fr) } }
     .col{ display:flex; flex-direction:column; gap:8px }
     label{ font-size:14px; color:#274736; font-weight:800 }
-    .input{ height: 56px; border-radius: 16px; border:1px solid rgba(21,62,41,0.20); padding: 12px 14px; font-size:16px; background:#ffffff }
-    .input:focus{ outline:none; border-color:#2f8f3d; box-shadow:0 0 0 4px rgba(47,143,61,0.12) }
-    .input:hover{ border-color:#1f5f3a }
+      .input{ height: 56px; border-radius: 16px; border:1px solid rgba(21,62,41,0.20); padding: 12px 14px; font-size:16px; background:#ffffff }
+      .input:focus{ outline:none; border-color:#2f8f3d; box-shadow:0 0 0 4px rgba(47,143,61,0.12) }
+      .input:hover{ border-color:#1f5f3a }
+      /* Select más bonito para Lote */
+      select.input{
+        appearance:none;
+        -webkit-appearance:none;
+        -moz-appearance:none;
+        background:
+          linear-gradient(135deg, #f5fff8, #e3f3ea) padding-box,
+          linear-gradient(135deg, rgba(47,143,61,0.55), rgba(21,62,41,0.55)) border-box;
+        border-radius: 18px;
+        border: 1.5px solid transparent;
+        box-shadow: 0 12px 26px rgba(21,62,41,0.16);
+        padding-right: 46px;
+        color:#153e29;
+        font-weight: 600;
+      }
+      select.input:focus{
+        box-shadow: 0 0 0 4px rgba(47,143,61,0.18);
+      }
+      select.input:hover{
+        border-color: transparent;
+        box-shadow: 0 14px 30px rgba(21,62,41,0.20);
+      }
+      select.input::-ms-expand{ display:none; }
+      .ana-section select.input{
+        background-image:
+          url("data:image/svg+xml,%3Csvg width='18' height='18' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M6 9L12 15L18 9' stroke='%23153E29' stroke-width='2.1' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"),
+          linear-gradient(135deg, #f5fff8, #e3f3ea);
+        background-repeat: no-repeat, no-repeat;
+        background-position: right 16px center, 0 0;
+        background-size: 18px 18px, 100% 100%;
+      }
     /* Oculta flechas de number para un look más limpio */
     input[type=number]::-webkit-outer-spin-button,
     input[type=number]::-webkit-inner-spin-button{ -webkit-appearance: none; margin: 0 }
@@ -198,7 +284,7 @@ type Analysis = { id: number; lote_id: number; meta_rendimiento_t_ha: number | n
     .ana-acc-card{ background:#fff; border:none; border-radius:16px; box-shadow: 0 14px 32px rgba(21,62,41,0.10); overflow:hidden; margin: 12px 0 18px; }
     .ana-acc-card>summary{ list-style:none; display:block; cursor:pointer; padding:0; position:relative }
     .ana-acc-card>summary::-webkit-details-marker{ display:none }
-    .ana-acc-hero{ position: relative; padding:0; min-height: 220px; background: url('/assets/7867974.jpg') center/cover no-repeat !important; border-bottom: none; }
+    .ana-acc-hero{ position: relative; padding:0; min-height: 150px; background: url('/assets/5104194.jpg') center/cover no-repeat !important; border-bottom: none; }
     .ana-acc-hero::before{ content:''; position:absolute; inset:0; background: linear-gradient(180deg, rgba(0,0,0,0.20), rgba(0,0,0,0.45)); }
     .acc-hero-center{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; text-align:center; padding: 12px }
     .acc-hero-title{ color:#fff; font-weight:900; font-size: 30px; letter-spacing:.2px; text-shadow: 0 2px 12px rgba(0,0,0,0.6) }
@@ -206,8 +292,9 @@ type Analysis = { id: number; lote_id: number; meta_rendimiento_t_ha: number | n
     .ana-form .input{ height: 54px; border-radius: 14px; font-size: 16px }
     .ana-form label{ font-size: 13px; font-weight: 800; color:#153e29 }
 
-    /* Use container gutters again (no full-bleed) */
-    .ana-section{ width: 100%; margin-left: 0; margin-right: 0; }
+      /* Hacer que los cards ocupen todo el ancho (pegados a los lados) */
+      .hero-shell{ margin: 6px 0 0 0; }
+      .ana-section{ width: 100%; margin-left: 0; margin-right: 0; }
     .download-item{ display:flex; align-items:center; justify-content:space-between; gap:12px; background: linear-gradient(180deg, #ffffff, #f7faf8); border:none; border-radius:16px; padding:14px 16px; overflow:hidden; flex-wrap:wrap; box-shadow:0 10px 24px rgba(21,62,41,0.08) }
     .download-item.ready{ box-shadow: 0 10px 24px rgba(16,185,129,0.12) }
     .download-item.pending{ box-shadow: 0 10px 24px rgba(245,158,11,0.10) }
@@ -227,7 +314,7 @@ type Analysis = { id: number; lote_id: number; meta_rendimiento_t_ha: number | n
     .download-acc{ background:#fff; border:none; border-radius:16px; box-shadow: 0 14px 32px rgba(21,62,41,0.10); overflow:hidden; margin: 12px 0 18px; }
     .download-acc>summary{ list-style:none; display:block; cursor:pointer; padding:0; position:relative }
     .download-acc>summary::-webkit-details-marker{ display:none }
-    .download-hero__img{ position: relative; height:200px; background: url('/assets/2110.w023.n001.1202B.p1.1202.jpg') center/cover no-repeat }
+    .download-hero__img{ position: relative; height:140px; background: url('/assets/2110.w023.n001.1202B.p1.1202.jpg') center/cover no-repeat }
     .download-hero__img::before{ content:''; position:absolute; inset:0; background: linear-gradient(180deg, rgba(0,0,0,0.10), rgba(0,0,0,0.35)) }
     .download-hero__label{
       position:absolute; left:50%; top:50%; transform: translate(-50%, -50%);
@@ -311,7 +398,35 @@ export class AnalysesPageComponent implements OnInit {
   readyAnalyses(){
     return this.analyses().filter(a => !!a.fertilizer_plan?.pdf_download);
   }
-}
+  scrollTo(id: string){
+    const el = document.getElementById(id);
+    if (el) {
+      const acc = el.querySelector('details.ana-acc-card') as HTMLDetailsElement | null;
+      if (acc && !acc.open) { acc.open = true; }
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  toggleAfterCreate(){
+    try {
+      const createAcc = document.getElementById('create-analysis-acc') as HTMLDetailsElement | null;
+      if (createAcc) { createAcc.open = false; }
+      const downloadAcc = document.getElementById('download-analysis-acc') as HTMLDetailsElement | null;
+      if (downloadAcc) {
+        downloadAcc.open = true;
+        downloadAcc.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    } catch {}
+  }}
+
+
+
+
+
+
+
+
+
 
 
 

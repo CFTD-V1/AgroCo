@@ -42,5 +42,17 @@ export class AppComponent {
     this.menuOpen = false;
   }
 
-  logout() { this.auth.logout(); }
+  logout() {
+    this.auth.logout();
+    this.menuOpen = false;
+    this.router.navigateByUrl('/login');
+  }
+
+  goBack() {
+    if (window.history.length > 1) {
+      window.history.back();
+    } else {
+      this.router.navigateByUrl('/');
+    }
+  }
 }

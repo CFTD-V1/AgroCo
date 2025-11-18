@@ -1,5 +1,5 @@
 export const environment = {
   production: false,
-  // Llamar directo al backend en dev para evitar problemas de proxy
-  apiUrl: 'http://localhost:8000/api'
+  // Backend local para desarrollo en este PC
+  apiUrl: 'http://127.0.0.1:8000/api'
 };

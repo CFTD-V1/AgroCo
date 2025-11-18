@@ -114,32 +114,61 @@ type Lot = { id: number; nombre: string; area_ha: number; analisis_suelo_total?:
       </div>
     </ng-container>
 
-    <ng-template #guest>
-      <div class="dash-stack">
-        <section class="feature-grid feature-grid--stack">
-          <a class="section-card feature-card" routerLink="/login">
-            <div class="feature-card__content">
-              <h3 class="feature-card__title">Mapea tus lotes</h3>
-              <p class="feature-card__text">Registra áreas y cultivos en minutos.</p>
+        <ng-template #guest>
+      <div class="dash-stack guest-safe">
+        <section class="guest-restore">
+          <a class="guest-card" routerLink="/login">
+            <div class="guest-card__content">
+              <h3 class="guest-card__title">Mapea tus lotes</h3>
+              <p class="guest-card__text">Registra &aacute;reas y cultivos en minutos.</p>
             </div>
+            <div class="guest-card__art art-lotes" aria-hidden="true"></div>
           </a>
+
+          <a class="guest-card" routerLink="/login">
+            <div class="guest-card__content">
+              <h3 class="guest-card__title">Analiza el suelo</h3>
+              <p class="guest-card__text">Carga resultados y obt&eacute;n diagn&oacute;sticos claros.</p>
+            </div>
+            <div class="guest-card__art art-analisis" aria-hidden="true"></div>
+          </a>
+
+          <a class="guest-card" routerLink="/login">
+            <div class="guest-card__content">
+              <h3 class="guest-card__title">Recibe recomendaciones</h3>
+              <p class="guest-card__text">Planifica la nutrici&oacute;n y fertiliza con confianza.</p>
+            </div>
+            <div class="guest-card__art art-reco" aria-hidden="true"></div>
+          </a>
+
+          <section class="guest-hero-cta">
+            <div class="guest-hero__overlay"></div>
+            <div class="guest-hero__copy">
+              <div class="brand">AgroCo</div>
+              <h2 class="guest-hero__title">Administra tus lotes con la calidez del campo.</h2>
+              <div class="guest-hero__actions">
+                <a class="btn-hero btn-green" routerLink="/login">Entrar</a>
+                <a class="btn-hero btn-orange" routerLink="/register">Registrarme</a>
+              </div>
+            </div>
+          </section>
         </section>
       </div>
     </ng-template>
   `,
   styles: [`
-    .hero-shell{ position:relative; background-size:cover; background-position:center; border-radius:22px; overflow:hidden; box-shadow:0 18px 44px rgba(21,62,41,0.22); padding:20px; min-height:360px; margin:6px 0; display:flex; align-items:center; justify-content:center }
+      .hero-shell{ position:relative; background-size:cover; background-position:center; border-radius:0; overflow:hidden; box-shadow:0 18px 44px rgba(21,62,41,0.22); padding:28px 24px; min-height:460px; margin:-44px -22px 20px; display:flex; align-items:center; justify-content:center }
     .hero-shell::before{ content:''; position:absolute; inset:0; background: linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0.45)); }
     .hero-shell > *{ position:relative; z-index:1 }
     .hero-copy{ color:#fff; max-width:720px; text-align:center; margin: 0 auto; display:flex; flex-direction:column; align-items:center; justify-content:center }
-    .greeting-pill{ display:inline-block; background: rgba(255,255,255,0.9); color:#153e29; border-radius:999px; padding:8px 14px; font-weight:900; margin-bottom:12px; font-size:14px }
-    .hero-title{ font-size:30px; line-height:1.18; font-weight:900; margin:8px 0 12px; text-shadow: 0 2px 12px rgba(0,0,0,0.5) }
-    .hero-stat-row{ display:flex; gap:14px; justify-content:center; align-items:center; margin: 10px 0 }
-    .hero-stat{ background:#fff; border:1px solid rgba(21,62,41,0.12); border-radius:16px; padding:12px 16px; box-shadow: 0 10px 24px rgba(21,62,41,0.14); width:160px }
-    .hero-stat__label{ color:#335f47; font-weight:800; font-size:12px }
-    .hero-stat__value{ color:#153e29; font-weight:900; font-size:22px; text-align:center }
-    .hero-actions{ display:flex; gap:12px; justify-content:center; align-items:center; margin-top:14px }
-    .btn-hero{ border:none; border-radius:14px; padding:12px 16px; font-weight:800; cursor:pointer; font-size:14px; letter-spacing:.2px; text-decoration:none }
+    .greeting-pill{ display:inline-block; background: rgba(255,255,255,0.94); color:#153e29; border-radius:999px; padding:12px 22px; font-weight:900; margin-bottom:18px; font-size:17px }
+    .hero-title{ font-size:36px; line-height:1.14; font-weight:900; margin:14px 0 18px; text-shadow: 0 3px 16px rgba(0,0,0,0.65) }
+    .hero-stat-row{ display:flex; gap:16px; justify-content:center; align-items:center; margin: 14px 0 12px }
+    .hero-stat{ background:#fff; border:1px solid rgba(21,62,41,0.12); border-radius:20px; padding:16px 22px; box-shadow: 0 12px 30px rgba(21,62,41,0.2); width:190px }
+    .hero-stat__label{ color:#335f47; font-weight:800; font-size:15px }
+    .hero-stat__value{ color:#153e29; font-weight:900; font-size:28px; text-align:center }
+    .hero-actions{ display:flex; gap:14px; justify-content:center; align-items:center; margin-top:16px }
+    .btn-hero{ border:none; border-radius:18px; padding:13px 20px; font-weight:800; cursor:pointer; font-size:15px; letter-spacing:.25px; text-decoration:none }
     .btn-orange{ background: linear-gradient(135deg, #f59e0b, #d97706); color:#ffffff }
     .btn-green{ background: linear-gradient(135deg, #2f8f3d, #1f5f3a); color:#fff }
 
@@ -148,9 +177,9 @@ type Lot = { id: number; nombre: string; area_ha: number; analisis_suelo_total?:
     .qa-strip{ position:relative; height:52px; border-radius:999px; overflow:hidden; cursor:pointer; box-shadow:0 12px 28px rgba(21,62,41,0.18); display:flex; align-items:center; justify-content:center }
     .qa-bg{ position:absolute; inset:0; display:flex }
     .qa-bg .bg{ flex:1 1 33.333%; background-size:cover; background-position:center }
-    .qa-bg .bg-1{ background-image:url('/assets/3425929.jpg') }
-    .qa-bg .bg-2{ background-image:url('/assets/223074-P1OEKE-223.jpg') }
-    .qa-bg .bg-3{ background-image:url('/assets/7867978.jpg') }
+    .qa-bg .bg-1{ background-image:url('/assets/global-warming-illustration.jpg') }
+    .qa-bg .bg-2{ background-image:url('/assets/farm-lifestyle-digital-art.jpg') }
+    .qa-bg .bg-3{ background-image:url('/assets/9305850.jpg') }
     .qa-overlay{ position:absolute; inset:0; background: linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0.45)) }
     .qa-title{ position:relative; z-index:1; color:#fff; font-weight:900; letter-spacing:.2px }
     .qa-arrow{ position:absolute; right:12px; top:50%; width:10px; height:10px; transform:translateY(-50%) rotate(45deg); border-right:2px solid rgba(255,255,255,0.95); border-bottom:2px solid rgba(255,255,255,0.95); transition: transform .2s ease }
@@ -162,7 +191,7 @@ type Lot = { id: number; nombre: string; area_ha: number; analisis_suelo_total?:
     .qa-item__title{ flex:1; display:flex; align-items:center; justify-content:center; text-align:center; font-weight:900; color:#1f5f3a; font-size:15px }
     .qa-bg-lotes{ background-image:url('/assets/image 20.png') }
     .qa-bg-analisis{ background-image:url('/assets/image 19.png') }
-    .qa-bg-reco{ background-image:url('/assets/5115294.jpg') }
+    .qa-bg-reco{ background-image:url('/assets/4072378.jpg') }
     /* quicklist removida */
     @media (min-width: 720px){ .qa-grid{ grid-template-columns: repeat(3, 1fr) } }
 
@@ -181,6 +210,89 @@ type Lot = { id: number; nombre: string; area_ha: number; analisis_suelo_total?:
     .chart-svg .grid path{ stroke: rgba(21,62,41,0.10); stroke-width:1 }
     .chart-svg .line{ stroke-width:2.5 }
     /* chips de rango eliminados */
+    /* Guest landing cards + hero (scoped) */
+    .guest-restore{ display:grid; gap:16px; margin-left:-20px; margin-right:-20px; width: calc(100% + 40px); padding-left: max(env(safe-area-inset-left,0px), 0px); padding-right: max(env(safe-area-inset-right,0px), 0px); }
+    .guest-card{ position:relative; display:grid; grid-template-columns: 1fr; gap:10px; align-items:center; text-decoration:none; color:inherit; background:#fff; border:1px solid rgba(21,62,41,0.12); border-radius:24px; padding:14px 20px; min-height: 120px; margin:0; box-shadow: 0 18px 30px rgba(21,62,41,0.14); overflow:hidden; transition: transform .18s ease, box-shadow .18s ease; opacity:0; transform: translateY(12px); animation: guestCardRise .7s ease-out forwards }
+    .guest-card__title{ margin:0 0 8px; font-weight:900; font-size:19px; color: var(--green-900) }
+    /* Títulos con color distinto por card */
+    .guest-restore > .guest-card:nth-of-type(1) .guest-card__title{ color: var(--primary-600); }
+    .guest-restore > .guest-card:nth-of-type(2) .guest-card__title{ color: #facc15; }
+    .guest-restore > .guest-card:nth-of-type(3) .guest-card__title{ color: var(--green-700); }
+    .guest-card__text{ margin:0; font-size:14px; color: var(--text-600); line-height:1.35 }
+    .guest-card__content{ position:relative; z-index:2 }
+    /* Imagen integrada solo al lado derecho */
+    .guest-card__art{ position:absolute; top:0; right:0; bottom:0; left:auto; width:clamp(120px, 42%, 240px); border-radius:inherit; background-size:cover; background-position:right center; background-repeat:no-repeat; opacity:1; filter:none; z-index:0 }
+    .guest-card::after{ content:''; position:absolute; inset:0; border-radius:inherit; z-index:1; background: linear-gradient(90deg, rgba(255,255,255,0.90) 0%, rgba(255,255,255,0.85) 48%, rgba(255,255,255,0.70) 65%, rgba(255,255,255,0.35) 85%, rgba(255,255,255,0.08) 100%); pointer-events:none }
+    .guest-card:active{ transform: translateY(1px); box-shadow: 0 12px 28px rgba(21,62,41,0.14) }
+    .guest-restore > .guest-card:nth-of-type(1){ animation-delay: .0s }
+    .guest-restore > .guest-card:nth-of-type(2){ animation-delay: .08s }
+    .guest-restore > .guest-card:nth-of-type(3){ animation-delay: .16s }
+    .art-lotes{ background-image:url('/assets/image 20.png') }
+    /* Intercambio de imágenes entre Analiza y Recomendaciones */
+    .art-analisis{ background-image:url('/assets/4072378.jpg') }
+    .art-reco{ background-image:url('/assets/image 19.png') }
+
+    .guest-hero-cta{ position:relative; border-radius:24px; overflow:hidden; min-height:430px; margin:8px 6px 0; background: #c0d5cb; background-image:url('/assets/image 22.png'); background-size:cover; background-position:center center; background-repeat:no-repeat; box-shadow: 0 24px 52px rgba(21,62,41,0.25); animation: heroDrift 22s ease-in-out infinite alternate }
+    .guest-hero__overlay{ position:absolute; inset:0; background: linear-gradient(180deg, rgba(0,0,0,0.14), rgba(0,0,0,0.40)) }
+    .guest-hero__copy{ position:absolute; inset:0; z-index:1; padding:40px 24px 28px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; color:#fff; transform: translateY(20px); }
+    .guest-hero__title{ margin: 16px 0 18px; font-size:29px; line-height:1.22; font-weight:900; letter-spacing:.015em; text-shadow: 0 3px 14px rgba(0,0,0,0.7); animation: heroTitleFloat 4.5s ease-in-out infinite alternate }
+    .brand{ font-weight:900; letter-spacing:.3px; background: rgba(255,255,255,0.97); color:#1f5f3a; border-radius:999px; padding:8px 16px; font-size:14px }
+    .guest-hero__actions{ display:flex; justify-content:center; align-items:center; gap:14px; margin-top:6px }
+    .guest-hero__actions .btn-hero{ padding: 14px 22px; font-size:15px; min-width:140px; text-align:center; border-radius:999px }
+
+    @keyframes guestCardRise{
+      0%{ opacity:0; transform: translateY(16px); }
+      100%{ opacity:1; transform: translateY(0); }
+    }
+
+    @keyframes heroDrift{
+      0%{ background-position:center 18%; }
+      50%{ background-position:center 26%; }
+      100%{ background-position:center 20%; }
+    }
+
+    @keyframes heroTitleFloat{
+      0%{ transform: translateY(0); }
+      100%{ transform: translateY(2px); }
+    }
+
+    /* Safe area for notches (top) */
+    .guest-safe{ padding-top: calc(env(safe-area-inset-top, 0px) + 12px); padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 4px); }
+    /* Legacy iOS support */
+    @supports (padding-top: constant(safe-area-inset-top)){
+      .guest-safe{ padding-top: calc(constant(safe-area-inset-top) + 12px); padding-bottom: calc(constant(safe-area-inset-bottom) + 12px); }
+    }
+
+    /* === Restaurar vista inicial (landing invitado) === */
+    .guest-restore.feature-grid.feature-grid--stack{ display:block; margin-top: 12px; }
+    .guest-restore.feature-grid.feature-grid--stack .feature-card{
+      display:flex !important;
+      flex-direction:column !important;
+      align-items:flex-start !important;
+      justify-content:center !important;
+      background:#ffffff !important;
+      border:1px solid rgba(21,62,41,0.12) !important;
+      border-radius: 999px !important;
+      padding: 16px 22px !important;
+      box-shadow: 0 14px 30px rgba(21,62,41,0.14) !important;
+      width: min(560px, calc(100% - 40px)) !important;
+      margin: 0 auto !important;
+      min-height: auto !important;
+      grid-template-columns: initial !important;
+      grid-template-rows: initial !important;
+    }
+    .guest-restore.feature-grid.feature-grid--stack .feature-card__title{
+      margin: 0 0 4px !important;
+      font-weight: 900 !important;
+      font-size: 18px !important;
+      color: var(--green-900) !important;
+    }
+    .guest-restore.feature-grid.feature-grid--stack .feature-card__text{
+      margin: 0 !important;
+      font-size: 13px !important;
+      color: var(--text-600) !important;
+      line-height: 1.28 !important;
+    }
   `]
 })
 export class DashboardPageComponent implements OnInit, OnDestroy {
@@ -234,12 +346,15 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
   }
 
   private async tickPrice() {
+    // Desactivado en local: evitamos llamar a /market/rice para no generar errores en consola
+    // return;
     // 1) Refrescar ancla desde backend aprox. cada hora
     if (Date.now() - this.lastFetch > 60*60*1000) {
       try {
         const r = await this.api.get<{ price: number }>(`/api/v1/market/rice?period=day`, true).catch(() => null);
-        if (r?.price) {
-          this.anchor.set(r.price);
+        const price = r?.price;
+        if (typeof price === 'number') {
+          this.anchor.set(price as number);
           this.lastFetch = Date.now();
         }
       } catch {}
@@ -293,3 +408,15 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
 
   toggleFunciones(){ this.funcionesOpen.update(v => !v); }
 }
+
+
+
+
+
+
+
+
+
+
+
+

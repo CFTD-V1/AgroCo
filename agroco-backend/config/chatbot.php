@@ -11,6 +11,35 @@ return [
     |
     */
     'intents' => [
+        'app_overview' => [
+            'keywords' => [
+                'como funciona', 'como usar', 'para que sirve',
+                'que hace la app', 'explicame la app', 'que es agroco',
+                'manual', 'ayuda general', 'como me ayuda'
+            ],
+            'responses' => [
+                'AGROCO te ayuda a organizar tus lotes, registrar los análisis de suelo y generar planes de fertilización en PDF listos para compartir. Todo gira alrededor de tres pasos: crear lotes, registrar análisis y generar el plan.',
+                'Piensa en la app como un cuaderno digital para tu finca: guardas tus lotes, subes los resultados de laboratorio y el sistema calcula por ti las dosis sugeridas de nutrientes por hectárea. Así mantienes un historial ordenado.',
+                'La aplicación conecta tus datos de suelo con una guía nutricional de arroz. Tú ingresas la información de tus lotes y análisis, y el sistema te devuelve recomendaciones claras y un plan descargable.',
+            ],
+            'follow_up' => [
+                'Si quieres, dime si deseas que te explique primero lotes, análisis o planes y vamos paso a paso.'
+            ],
+        ],
+        'getting_started' => [
+            'keywords' => [
+                'que debo hacer primero', 'por donde empiezo', 'primer paso',
+                'como empezar', 'que hago primero', 'iniciar en la app'
+            ],
+            'responses' => [
+                'El primer paso es crear al menos un lote con su nombre y área. Luego registra un análisis de suelo para ese lote y, por último, genera el plan de fertilización. Con esos tres pasos ya tienes todo el flujo básico.',
+                'Empieza por ir a la sección "Mis lotes" y crear un lote con nombre, área y ubicación. Después ve a "Análisis", vincula el análisis al lote y al final usa "Generar plan" para obtener el PDF.',
+                'Primero: registra tus lotes. Segundo: ingresa los análisis de suelo de laboratorio. Tercero: genera los planes de fertilización. Si me dices en qué paso estás, te guío con más detalle.',
+            ],
+            'follow_up' => [
+                '¿Quieres que te envíe los pasos detallados para crear un lote nuevo ahora mismo?'
+            ],
+        ],
         'greeting' => [
             'keywords' => ['hola', 'buenas', 'saludo', 'buen dia', 'buenas tardes', 'buenas noches', 'que mas', 'buenos dias'],
             'responses' => [
