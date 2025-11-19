@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
 use App\Http\Controllers\{
     AuthController,
+    AdminController,
     LotController,
     SoilAnalysisController,
     RecommendationController,
@@ -187,6 +188,19 @@ Route::prefix('v1')->group(function () {
                 'updated_at' => now()->toIso8601String(),
             ]);
         });
+
+        // ========= ADMIN =========
+        Route::middleware(['admin'])->prefix('admin')->group(function () {
+            Route::get('/summary', [AdminController::class, 'summary']);
+
+            Route::get('/users', [AdminController::class, 'users']);
+            Route::post('/users', [AdminController::class, 'storeUser']);
+            Route::put('/users/{user}', [AdminController::class, 'updateUser']);
+            Route::delete('/users/{user}', [AdminController::class, 'destroyUser']);
+
+            Route::get('/soil-analyses', [AdminController::class, 'soilAnalyses']);
+            Route::get('/fertilizer-plans', [AdminController::class, 'fertilizerPlans']);
+        });
     });
 
     // Respuesta a preflight CORS (OPTIONS) para cualquier ruta de v1
@@ -194,5 +208,3 @@ Route::prefix('v1')->group(function () {
         return response()->noContent();
     })->where('any', '.*');
 });
-
-

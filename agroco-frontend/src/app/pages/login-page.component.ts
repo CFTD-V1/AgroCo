@@ -189,7 +189,8 @@ export class LoginPageComponent {
     this.error = null;
     try {
       await this.auth.login({ nombre_completo: this.nombre, documento_identidad: this.documento });
-      this.router.navigateByUrl('/');
+      const user = this.auth.user();
+      this.router.navigateByUrl(user?.is_admin ? '/admin' : '/');
     } catch (e: any) {
       const apiMsg = e?.error?.message;
       const apiErrors = e?.error?.errors;

@@ -10,6 +10,8 @@ type User = {
   telefono?: string | null;
   ocupacion?: string | null;
   tipo_documento?: string | null;
+  must_change_password?: boolean;
+  is_admin?: boolean;
 };
 
 @Injectable({ providedIn: 'root' })
@@ -24,6 +26,7 @@ export class AuthService {
 
   token() { return this._token(); }
   user() { return this._user(); }
+  isAdmin() { return !!this._user()?.is_admin; }
 
   async login(data: { nombre_completo: string; documento_identidad: string }) {
     this.loading.set(true);
@@ -81,7 +84,18 @@ export class AuthService {
     }
   }
 
-  private async me() {
+  async ensureUser(): Promise<User | null> {
+    if (this._user()) return this._user();
+    if (!this._token()) return null;
+    try {
+      await this.me();
+      return this._user();
+    } catch {
+      return null;
+    }
+  }
+
+  async me() {
     try { const me = await this.api.get<User>('/api/v1/me', true); this._user.set(me!); } catch { this._token.set(null); localStorage.removeItem('agroco_token'); }
   }
 }

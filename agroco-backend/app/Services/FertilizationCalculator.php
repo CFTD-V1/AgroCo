@@ -28,7 +28,7 @@ class FertilizationCalculator
             'Na' => 2.0,
         ],
         'criticals' => [
-            'Zn' => 1.5,
+            'Zn' => 2.0,
             'Mn' => 5.0,
             'B'  => 0.3,
             'Cu' => 0.5,
@@ -90,8 +90,6 @@ class FertilizationCalculator
         $pClass  = $this->classifyPhosphorus($analysis->p_mgkg);
         $kClass  = $this->classifyPotassium($analysis->k_cmol);
         $sClass  = $this->classifySulfur($analysis->s_mgkg);
-        $znClass = $this->classifyZinc($analysis->zn_mgkg);
-        $mnClass = $this->classifyManganese($analysis->mn_mgkg);
 
         // Metas principales
         $yield = max(0.0, (float) $analysis->yield_target_t_ha);
@@ -166,7 +164,7 @@ class FertilizationCalculator
         $products['urea_46'] = round($urea, 1);
 
         // Micronutrients (suelo)
-        if ($this->needsMicronutrient($analysis->zn_mgkg, $critical['Zn'] ?? 1.5)) {
+        if ($this->needsMicronutrient($analysis->zn_mgkg, $critical['Zn'] ?? 2.0)) {
             $products['znso4_suelo'] = round(
                 $microDoses['Zn_soil'] / $sources['znso4_suelo']['Zn'],
                 1
@@ -195,23 +193,32 @@ class FertilizationCalculator
         }
 
         // Manganeso foliar
-        $products['mnso4_foliar'] = ($mnClass !== 'high')
+        $mnFoliarNeeded = $this->needsMicronutrient($analysis->mn_mgkg, $critical['Mn'] ?? 5.0);
+        $products['mnso4_foliar'] = $mnFoliarNeeded
             ? round($microDoses['Mn_foliar'], 1)
             : 0.0;
 
         // Plan de aplicación por fases
         $schedule = $this->buildSchedule($products);
 
+        $organicMatterRecommendation = $this->organicMatterRecommendation($analysis);
+
+        $targetsOutput = [
+            'N'                            => round($nitrogen, 1),
+            'P2O5'                         => round($p2o5, 1),
+            'K2O'                          => round($k2o, 1),
+            'S'                            => round(max(0.0, $sulfur), 1),
+            'sat_targets'                  => $satTargets,
+            'use_zn_soil'                  => $this->needsMicronutrient($analysis->zn_mgkg, $critical['Zn'] ?? 2.0),
+            'use_mn_foliar'                => $mnFoliarNeeded,
+        ];
+
+        if ($organicMatterRecommendation !== null) {
+            $targetsOutput['organic_matter_recommendation'] = $organicMatterRecommendation;
+        }
+
         return [
-            'targets' => [
-                'N'            => round($nitrogen, 1),
-                'P2O5'         => round($p2o5, 1),
-                'K2O'          => round($k2o, 1),
-                'S'            => round(max(0.0, $sulfur), 1),
-                'sat_targets'  => $satTargets,
-                'use_zn_soil'  => $this->needsMicronutrient($analysis->zn_mgkg, $critical['Zn'] ?? 1.5),
-                'use_mn_foliar'=> $mnClass !== 'high',
-            ],
+            'targets' => $targetsOutput,
             'products' => array_map(fn ($value) => round((float) $value, 1), $products),
             'split'    => $schedule,
         ];
@@ -226,18 +233,18 @@ class FertilizationCalculator
     private function phosphorusTarget(string $class): float
     {
         return match ($class) {
-            'low'    => 50.0,
-            'medium' => 30.0,
-            default  => 0.0,
+            'low'    => 60.0,
+            'medium' => 45.0,
+            default  => 30.0,
         };
     }
 
     private function potassiumTarget(string $class): float
     {
         return match ($class) {
-            'low'    => 100.0,
-            'medium' => 60.0,
-            default  => 0.0,
+            'low'    => 130.0,
+            'medium' => 100.0,
+            default  => 80.0,
         };
     }
 
@@ -245,7 +252,7 @@ class FertilizationCalculator
     {
         return match ($class) {
             'low'    => 20.0,
-            'medium' => 10.0,
+            'medium' => 20.0,
             default  => 0.0,
         };
     }
@@ -275,7 +282,7 @@ class FertilizationCalculator
             return 'medium';
         }
 
-        return $value < 10.0 ? 'low' : ($value <= 40.0 ? 'medium' : 'high');
+        return $value < 6.0 ? 'low' : ($value <= 10.0 ? 'medium' : 'high');
     }
 
     private function classifyPotassium(?float $value): string
@@ -284,7 +291,7 @@ class FertilizationCalculator
             return 'medium';
         }
 
-        return $value < 0.2 ? 'low' : ($value <= 0.4 ? 'medium' : 'high');
+        return $value < 0.20 ? 'low' : ($value <= 0.30 ? 'medium' : 'high');
     }
 
     private function classifySulfur(?float $value): string
@@ -336,19 +343,35 @@ class FertilizationCalculator
                 'borax_11b'          => $products['borax_11b'] ?? 0.0,
                 'cuso4_25cu'         => $products['cuso4_25cu'] ?? 0.0,
                 'fe_eddha_6fe'       => $products['fe_eddha_6fe'] ?? 0.0,
-                'urea_46'            => round($urea * 0.21, 1),
+                'urea_46'            => round($urea * 0.20, 1),
                 'kcl_0_0_60'         => round($kcl * 0.40, 1),
-                'mnso4_foliar'       => 0.0,
             ],
             'tillering' => [
-                'urea_46'      => round($urea * 0.46, 1),
+                'urea_46'      => round($urea * 0.45, 1),
                 'kcl_0_0_60'   => round($kcl * 0.35, 1),
                 'mnso4_foliar' => $products['mnso4_foliar'] ?? 0.0,
             ],
             'panicle' => [
-                'urea_46'    => round($urea * 0.33, 1),
+                'urea_46'    => round($urea * 0.35, 1),
                 'kcl_0_0_60' => round($kcl * 0.25, 1),
             ],
         ];
+    }
+
+    private function organicMatterRecommendation(SoilAnalysis $analysis): ?string
+    {
+        $hasMoField = isset($analysis->mo_pct) || property_exists($analysis, 'mo_pct');
+        if (!$hasMoField) {
+            return null;
+        }
+
+        $moValue = $analysis->mo_pct;
+        if ($moValue === null) {
+            return null;
+        }
+
+        return (float) $moValue < 3.0
+            ? 'Se recomienda aplicar entre 2 y 4 t/ha de compost o abono orgánico bien descompuesto para mejorar la materia orgánica y la estructura del suelo.'
+            : 'La materia orgánica es adecuada.';
     }
 }

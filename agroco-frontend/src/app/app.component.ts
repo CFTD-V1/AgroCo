@@ -42,10 +42,10 @@ export class AppComponent {
     this.menuOpen = false;
   }
 
-  logout() {
-    this.auth.logout();
+  async logout() {
+    await this.auth.logout();
     this.menuOpen = false;
-    this.router.navigateByUrl('/login');
+    await this.router.navigateByUrl('/login');
   }
 
   goBack() {

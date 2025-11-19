@@ -26,6 +26,7 @@ class User extends Authenticatable
         'username',
         'password',
         'must_change_password',
+        'is_admin',
         'email',
         'email_verified_at',
         'avatar_path',
@@ -39,6 +40,7 @@ class User extends Authenticatable
 
     protected $casts = [
         'must_change_password' => 'boolean',
+        'is_admin' => 'boolean',
         'locked_until' => 'datetime',
         'email_verified_at' => 'datetime',
     ];

