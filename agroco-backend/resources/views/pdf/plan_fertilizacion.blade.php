@@ -114,16 +114,39 @@ $topProducts = collect($resumenCompra)
             border: 1px solid #e5e5e5;
             padding: 6px 8px;
         }
-        .table th {
-            background: #f2f4f8;
-            font-weight: 600;
-            text-align: left;
-        }
-        .num { text-align: right; width: 110px; }
+       .table th {
+           background: #f2f4f8;
+           font-weight: 600;
+           text-align: left;
+       }
+       .num { text-align: right; width: 110px; }
 
-        .section { page-break-inside: avoid; }
-        .page-break-before { page-break-before: always; }
-        .top-pad { margin-top: 6mm; }
+       .section { page-break-inside: avoid; }
+       .page-break-before { page-break-before: always; }
+       .top-pad { margin-top: 6mm; }
+
+        .instructions {
+            margin-top: 4mm;
+            padding: 12px 16px;
+            border-radius: 12px;
+            background: #f5f7ff;
+            border: 1px solid #dbe4ff;
+        }
+        .instructions h3 {
+            margin: 0 0 4px 0;
+            font-size: 14px;
+            color: #1f2937;
+        }
+        .instructions ul {
+            padding-left: 1.1em;
+            margin: 0;
+            color: #1e1e1e;
+        }
+        .instructions li {
+            margin-bottom: 4px;
+            font-size: 12px;
+            line-height: 1.4;
+        }
 
         .farmer-summary {
             background: #f8fafc;
@@ -342,6 +365,18 @@ $topProducts = collect($resumenCompra)
         </div>
     @endforeach
 
+    <div class="card security instructions section">
+        <h3>Cómo aplicar los fertilizantes</h3>
+        <ul>
+            <li>Calibra la barrena o aplicador antes de comenzar. Aplica solo con el suelo húmedo y sin lluvia fuerte para evitar pérdidas por lixiviación.</li>
+            <li>En siembra, distribuye yeso/amonio y DAP en banda a 8-10 cm del surco; cubre con luz y asegúrate de que el producto quede dentro del perfil de las primeras 10-15 cm.</li>
+            <li>Durante macollamiento y embuche, reparte la urea y KCl como cobertura superficial en ambos lados del surco, siguiendo los porcentajes por fase que aparecen arriba; deja un espacio de 5-6 cm del tallo para evitar quema.</li>
+            <li>Siempre humedece ligeramente después de cada fraccionamiento para activar los nutrientes, excepto si viene lluvia intensa (entonces espera a que la humedad se estabilice).</li>
+            <li>Aplica los micronutrientes (Zn, Mn, B) temprano en la etapa vegetativa para corregir deficiencias; el manganeso foliar es ideal cerca del macollamiento.</li>
+            <li>Usa equipo de seguridad y evita mezclar productos incompatibles en una misma tolva.</li>
+        </ul>
+    </div>
+
     {{-- SALTO DE PAGINA ANTES DEL RESUMEN --}}
     <div class="page-break-before"></div>
 
@@ -372,4 +407,3 @@ $topProducts = collect($resumenCompra)
 
 </body>
 </html>
-

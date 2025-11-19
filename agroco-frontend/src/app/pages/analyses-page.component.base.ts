@@ -360,54 +360,19 @@ export class AnalysesPageComponent implements OnInit {
   async onCreate() {
     if (!this.auth.token()) return;
     // Validaciones rápidas en cliente
-    if (!this.form.lotId) {
-      this.error.set('Debes seleccionar el lote al que pertenece el análisis.');
-      return;
-    }
-    if (!this.form.sampled_at) {
-      this.error.set('Ingresa la fecha de muestreo. Es la fecha en la que se tomó la muestra de suelo.');
-      return;
-    }
-    const sample = new Date(this.form.sampled_at);
-    const today = new Date();
-    sample.setHours(0, 0, 0, 0);
-    today.setHours(0, 0, 0, 0);
-    if (sample.getTime() > today.getTime()) {
-      this.error.set('La fecha de muestreo no puede ser mayor a la fecha actual. Selecciona hoy o una fecha anterior en la que realmente se tomó la muestra.');
-      return;
-    }
-    const lot = this.lots().find(l => (l as any).id === Number(this.form.lotId));
-    if (lot && (lot as any).fecha_siembra) {
-      try {
-        const sowing = new Date((lot as any).fecha_siembra);
-        sowing.setHours(0, 0, 0, 0);
-        if (sample.getTime() < sowing.getTime()) {
-          this.error.set('La fecha de muestreo no puede ser menor a la fecha de siembra del lote. Usa una fecha igual o posterior a la siembra.');
-          return;
-        }
-      } catch {}
-    }
+    if (!this.form.lotId) { this.error.set('Selecciona un lote'); return; }
     const goal = Number(this.form.yield_target_t_ha);
-    if (isNaN(goal) || goal < 4 || goal > 12) {
-      this.error.set('El objetivo de recolección debe ser un número entre 4 y 12 t/ha. Por ejemplo: 7.5.');
-      return;
-    }
-
-    this.loading.set(true);
-    this.error.set(null);
+    if (isNaN(goal) || goal <= 0) { this.error.set('Ingresa un objetivo de rendimiento válido (t/ha)'); return; }
+    this.loading.set(true); this.error.set(null);
     try {
       const payload: any = { sampled_at: this.form.sampled_at || undefined, yield_target_t_ha: Number(this.form.yield_target_t_ha) };
-      for (const k of ['p_mgkg','k_cmol','ca_cmol','mg_cmol','s_mgkg','b_mgkg','fe_mgkg','mn_mgkg','zn_mgkg','cu_mgkg']) {
-        if (this.form[k] !== '' && this.form[k] !== null && this.form[k] !== undefined) {
-          payload[k] = Number(this.form[k]);
-        }
-      }
+      for (const k of ['p_mgkg','k_cmol','ca_cmol','mg_cmol','s_mgkg','b_mgkg','fe_mgkg','mn_mgkg','zn_mgkg','cu_mgkg']) if (this.form[k] !== '' && this.form[k] !== null && this.form[k] !== undefined) payload[k] = Number(this.form[k]);
       await this.api.post(`/api/v1/lots/${this.form.lotId}/soil-analyses`, payload, true);
       this.form = { lotId: '', sampled_at: '', yield_target_t_ha: '7', p_mgkg: '', k_cmol: '', ca_cmol: '', mg_cmol: '', s_mgkg: '', b_mgkg: '', fe_mgkg: '', mn_mgkg: '', zn_mgkg: '', cu_mgkg: '' };
       await this.load();
       this.toast.show('Análisis creado correctamente', 'success');
     } catch (e: any) {
-      const message = 'Hay errores en los datos del análisis. Revisa que la fecha y los nutrientes estén dentro de los rangos permitidos (por ejemplo, K no debe ser mayor a 5 cmol(+)/kg).';
+      const message = e?.message || 'No se pudo crear el análisis';
       this.error.set(message);
       this.toast.show(message, 'error');
     }

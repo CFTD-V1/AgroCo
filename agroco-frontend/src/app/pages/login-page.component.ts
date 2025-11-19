@@ -121,6 +121,7 @@ import { AuthService } from '../services/auth.service';
     }
     .auth-input::placeholder { color: #9ab0a3; }
     .field-error { color: #b64040; font-weight: 600; }
+    .auth-error { margin-top: 6px; color: #b64040; font-weight: 600; }
     .auth-big-cta {
       width: 100%; border: 0; border-radius: 999px; padding: 14px 20px;
       font-weight: 800; font-family: 'Outfit', 'Plus Jakarta Sans', system-ui, sans-serif; letter-spacing: 0.2px;

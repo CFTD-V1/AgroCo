@@ -21,10 +21,10 @@ type Req = { targets: { rice: RiceTargets } };
   styles: [`
     .hero-shell{
       margin: -10px -18px 0;
-      padding: 26px 20px 42px;
+      padding: 30px 22px 54px;
       border-radius: 28px;
       background:
-        linear-gradient(135deg, rgba(255,255,255,0.65), rgba(255,255,255,0.65)),
+        linear-gradient(135deg, rgba(255,255,255,0.40), rgba(255,255,255,0.42)),
         url('/assets/Wavy_Agr-01_Single-04.jpg');
       background-size: cover;
       background-position: center;
@@ -32,34 +32,34 @@ type Req = { targets: { rice: RiceTargets } };
       grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
       gap: 18px;
       align-items: center;
-      box-shadow: 0 22px 50px rgba(21,62,41,0.24);
-      min-height: 320px;
+      box-shadow: 0 24px 56px rgba(21,62,41,0.26);
+      min-height: 360px;
     }
     .hero-copy{
       text-align: left;
     }
     .hero-copy .tagline{
       display:inline-block;
-      font-size: 13px;
+      font-size: 16px;
       font-weight: 900;
       letter-spacing: .14em;
       text-transform: uppercase;
-      color: #335f47;
-      margin: 0 auto 8px;
+      color: #0f172a;
+      margin: 0 auto 10px;
       text-align: center;
       width: 100%;
     }
     .hero-copy .hero-title{
-      margin: 4px 0 10px;
-      font-size: 26px;
+      margin: 4px 0 12px;
+      font-size: 32px;
       line-height: 1.22;
       font-weight: 900;
-      color: #153e29;
+      color: #0f172a;
     }
     .hero-copy .hero-subtitle{
       margin: 0;
-      font-size: 14px;
-      color: #335f47;
+      font-size: 16px;
+      color: #111827;
       font-weight: 500;
     }
     .hero-illustration{
@@ -75,46 +75,46 @@ type Req = { targets: { rice: RiceTargets } };
     .nutri-accordion{
       margin-top: 26px;
       display: grid;
-      gap: 16px;
+      gap: 18px;
     }
     .accordion-card{
-      border-radius: 26px;
-      background: rgba(255,255,255,0.92);
-      box-shadow: 0 12px 28px rgba(21,62,41,0.14);
+      border-radius: 28px;
+      background: rgba(255,255,255,0.88);
+      box-shadow: 0 16px 34px rgba(21,62,41,0.18);
       overflow: hidden;
-      min-height: 86px;
+      min-height: 104px;
     }
     .nutri-accordion > .accordion-card:nth-of-type(1){
       background:
-        linear-gradient(135deg, rgba(255,255,255,0.55), rgba(255,255,255,0.65)),
+        linear-gradient(135deg, rgba(255,255,255,0.22), rgba(255,255,255,0.34)),
         url('/assets/2105.w026.n002.445B.p0.445.jpg');
       background-size: cover;
       background-position: center;
     }
     .nutri-accordion > .accordion-card:nth-of-type(2){
       background:
-        linear-gradient(135deg, rgba(255,255,255,0.55), rgba(255,255,255,0.65)),
+        linear-gradient(135deg, rgba(255,255,255,0.22), rgba(255,255,255,0.34)),
         url('/assets/21034604.jpg');
       background-size: cover;
       background-position: center;
     }
     .nutri-accordion > .accordion-card:nth-of-type(3){
       background:
-        linear-gradient(135deg, rgba(255,255,255,0.55), rgba(255,255,255,0.65)),
+        linear-gradient(135deg, rgba(255,255,255,0.22), rgba(255,255,255,0.34)),
         url('/assets/40Z_2105.w026.n002.444B.p0.444.jpg');
       background-size: cover;
       background-position: center;
     }
     .nutri-accordion > .accordion-card:nth-of-type(4){
       background:
-        linear-gradient(135deg, rgba(255,255,255,0.55), rgba(255,255,255,0.65)),
+        linear-gradient(135deg, rgba(255,255,255,0.22), rgba(255,255,255,0.34)),
         url('/assets/3727.jpg');
       background-size: cover;
       background-position: center;
     }
     .accordion-header{
       width: 100%;
-      padding: 18px 20px;
+      padding: 22px 22px;
       background: transparent;
       border: none;
       display: flex;
@@ -127,14 +127,14 @@ type Req = { targets: { rice: RiceTargets } };
     }
     .accordion-title{
       font-weight: 900;
-      font-size: 18px;
-      color: #153e29;
+      font-size: 21px;
+      color: #111827;
       font-family: 'Baloo 2', 'Outfit', 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
       letter-spacing: 0.01em;
     }
     .accordion-sub{
-      font-size: 14px;
-      color: #4b5563;
+      font-size: 16px;
+      color: #111827;
       font-family: 'Baloo 2', 'Outfit', 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
     }
     .accordion-arrow{
@@ -152,11 +152,11 @@ type Req = { targets: { rice: RiceTargets } };
       transform: rotate(90deg);
     }
     .accordion-body{
-      padding: 0 18px 14px;
+      padding: 0 20px 18px;
       border-top: 1px solid rgba(21,62,41,0.06);
     }
     .nutri-list{
-      margin-top:12px;
+      margin-top:14px;
       display:flex;
       flex-direction:column;
       gap:8px;
@@ -164,22 +164,22 @@ type Req = { targets: { rice: RiceTargets } };
     .nutri-item{
       display:flex;
       align-items:center;
-      gap:10px;
-      padding:6px 10px;
-      border-radius:12px;
-      background: rgba(255,255,255,0.78);
+      gap:12px;
+      padding:8px 12px;
+      border-radius:14px;
+      background: rgba(255,255,255,0.82);
     }
     .nutri-icon{
-      width:28px;
-      height:28px;
+      width:30px;
+      height:30px;
       border-radius:999px;
       background:#e5f0e8;
       display:flex;
       align-items:center;
       justify-content:center;
       font-weight:900;
-      font-size:14px;
-      color:#153e29;
+      font-size:15px;
+      color:#111827;
       flex-shrink:0;
     }
     .nutri-content{
@@ -190,20 +190,20 @@ type Req = { targets: { rice: RiceTargets } };
       width:100%;
     }
     .nutri-label{
-      font-size:14px;
+      font-size:16px;
       font-weight:700;
-      color:#153e29;
+      color:#111827;
     }
     .nutri-value{
-      font-size:14px;
+      font-size:16px;
       font-weight:800;
-      color:#153e29;
+      color:#111827;
     }
     .nutri-unit{
       margin-left:4px;
-      font-size:11px;
+      font-size:12px;
       font-weight:600;
-      color:#4b5563;
+      color:#374151;
     }
   `],
   template: `

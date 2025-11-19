@@ -16,10 +16,10 @@ class StoreUserRequest extends FormRequest
 
     protected function prepareForValidation(): void
     {
-        $fullName = Str::squish((string) $this->input('nombre_completo'));
-        $document = preg_replace('/\D+/', '', (string) $this->input('documento_identidad'));
+        $fullName  = Str::squish((string) $this->input('nombre_completo'));
+        $document  = preg_replace('/\D+/', '', (string) $this->input('documento_identidad'));
         $occupation = Str::squish((string) $this->input('ocupacion'));
-        $email = $this->input('email');
+        $email     = $this->input('email');
 
         $this->merge([
             'nombre_completo'     => $fullName,
@@ -68,39 +68,59 @@ class StoreUserRequest extends FormRequest
             $fullName = (string) $this->input('nombre_completo');
 
             $parts = array_values(array_filter(explode(' ', $fullName)));
-            if (count($parts) < 3) {
+
+            // Al menos nombre + un apellido
+            if (count($parts) < 2) {
                 $validator->errors()->add(
                     'nombre_completo',
-                    'Indica al menos un nombre y dos apellidos.'
+                    'Indica al menos un nombre y un apellido.'
                 );
             } else {
-                $primerApellido = $parts[count($parts) - 2] ?? null;
-                $segundoApellido = $parts[count($parts) - 1] ?? null;
+                // Primer apellido obligatorio, segundo apellido opcional
+                $primerApellido = null;
+                $segundoApellido = null;
 
-                if ($primerApellido === null || $segundoApellido === null) {
-                    $validator->errors()->add(
-                        'nombre_completo',
-                        'No se pudieron identificar dos apellidos válidos.'
-                    );
+                if (count($parts) === 2) {
+                    // Ej: "Cristian Tafur" => primer apellido = Tafur
+                    $primerApellido = $parts[1];
+                } elseif (count($parts) >= 3) {
+                    // Ej: "Cristian David Tafur Lopez" => Tafur (primer), Lopez (segundo)
+                    $primerApellido = $parts[count($parts) - 2] ?? null;
+                    $segundoApellido = $parts[count($parts) - 1] ?? null;
                 }
 
-                if ($primerApellido !== null && $segundoApellido !== null) {
-                    if (Str::length($primerApellido) < 2 || Str::length($segundoApellido) < 2) {
+                if ($primerApellido === null) {
+                    $validator->errors()->add(
+                        'nombre_completo',
+                        'No se pudo identificar un apellido válido.'
+                    );
+                } else {
+                    if (Str::length($primerApellido) < 2) {
                         $validator->errors()->add(
                             'nombre_completo',
-                            'Cada apellido debe tener al menos dos caracteres.'
+                            'El apellido debe tener al menos dos caracteres.'
                         );
                     }
 
-                    if (Str::lower($primerApellido) === Str::lower($segundoApellido)) {
-                        $validator->errors()->add(
-                            'nombre_completo',
-                            'Los apellidos no pueden ser idénticos.'
-                        );
+                    if ($segundoApellido !== null) {
+                        if (Str::length($segundoApellido) < 2) {
+                            $validator->errors()->add(
+                                'nombre_completo',
+                                'Cada apellido debe tener al menos dos caracteres.'
+                            );
+                        }
+
+                        if (Str::lower($primerApellido) === Str::lower($segundoApellido)) {
+                            $validator->errors()->add(
+                                'nombre_completo',
+                                'Los apellidos no pueden ser idénticos.'
+                            );
+                        }
                     }
                 }
             }
 
+            // Validaciones adicionales para documento de identidad
             $document = (string) $this->input('documento_identidad');
             if ($document !== '') {
                 $blacklist = [
@@ -162,5 +182,4 @@ class StoreUserRequest extends FormRequest
         ];
     }
 }
-
 

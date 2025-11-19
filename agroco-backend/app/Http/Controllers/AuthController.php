@@ -27,11 +27,11 @@ class AuthController extends Controller
     {
         $data = $request->validated();
         $nameParts = $this->splitFullName($data['nombre_completo']);
-        if ($nameParts['primer_nombre'] === '' || $nameParts['primer_apellido'] === '' || $nameParts['segundo_apellido'] === null) {
+        if ($nameParts['primer_nombre'] === '' || $nameParts['primer_apellido'] === '') {
             return response()->json([
                 'message' => 'No se pudo interpretar el nombre completo proporcionado.',
                 'errors' => [
-                    'nombre_completo' => ['Incluye al menos un nombre y dos apellidos.'],
+                    'nombre_completo' => ['Incluye al menos un nombre y un apellido.'],
                 ],
             ], 422);
         }
@@ -291,7 +291,11 @@ class AuthController extends Controller
 
         $count = count($parts);
 
-        if ($count >= 2) {
+        if ($count === 1) {
+            // Ej: "Cristian Tafur" => primer apellido = Tafur
+            $primerApellido = $parts[0];
+        } elseif ($count >= 2) {
+            // Ej: "Cristian David Tafur Lopez" => Tafur (primer), Lopez (segundo)
             $segundoApellido = array_pop($parts);
             $primerApellido = array_pop($parts);
             $segundoNombre = $parts ? implode(' ', $parts) : null;
