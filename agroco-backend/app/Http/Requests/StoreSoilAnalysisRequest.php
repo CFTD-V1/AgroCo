@@ -55,10 +55,38 @@ class StoreSoilAnalysisRequest extends FormRequest
     public function withValidator(Validator $validator): void
     {
         $validator->after(function (Validator $validator) {
-            if ($this->filled('sampled_at') && now()->lt($this->date('sampled_at'))) {
-                $validator->errors()->add('sampled_at', 'La fecha de muestreo no puede estar en el futuro.');
+            if (! $this->filled('sampled_at')) {
+                return;
+            }
+
+            try {
+                $sampleDate = $this->date('sampled_at');
+            } catch (\Throwable $e) {
+                $validator->errors()->add('sampled_at', 'La fecha de muestreo no es válida.');
+                return;
+            }
+
+            $today = now()->startOfDay();
+            if ($sampleDate->gt($today)) {
+                $validator->errors()->add('sampled_at', 'La fecha de muestreo no puede ser mayor a la fecha actual.');
+            }
+
+            $lot = $this->route('lot');
+            if ($lot && $lot->fecha_siembra) {
+                try {
+                    $sowing = $lot->fecha_siembra instanceof \Carbon\Carbon
+                        ? $lot->fecha_siembra->copy()->startOfDay()
+                        : \Carbon\Carbon::parse($lot->fecha_siembra)->startOfDay();
+                    if ($sampleDate->lt($sowing)) {
+                        $validator->errors()->add(
+                            'sampled_at',
+                            'La fecha de muestreo no puede ser anterior a la fecha de siembra del lote.'
+                        );
+                    }
+                } catch (\Throwable $e) {
+                    // si la fecha de siembra es inválida, no rompemos la validación
+                }
             }
         });
     }
 }
-

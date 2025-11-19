@@ -3,7 +3,7 @@
 return [
     /*
     |--------------------------------------------------------------------------
-    | Definición de intents
+    | Definición de intents del asistente
     |--------------------------------------------------------------------------
     |
     | Cada intent incluye palabras clave y respuestas de tono cercano.
@@ -13,7 +13,8 @@ return [
     'intents' => [
         'app_overview' => [
             'keywords' => [
-                'como funciona', 'como usar', 'para que sirve',
+                'como funciona', 'como funciona el sistema', 'como funciona la app', 'como funciona el aplicativo',
+                'como usar', 'para que sirve',
                 'que hace la app', 'explicame la app', 'que es agroco',
                 'manual', 'ayuda general', 'como me ayuda'
             ],
@@ -26,13 +27,14 @@ return [
                 'Si quieres, dime si deseas que te explique primero lotes, análisis o planes y vamos paso a paso.'
             ],
         ],
+
         'getting_started' => [
             'keywords' => [
                 'que debo hacer primero', 'por donde empiezo', 'primer paso',
                 'como empezar', 'que hago primero', 'iniciar en la app'
             ],
             'responses' => [
-                'El primer paso es crear al menos un lote con su nombre y área. Luego registra un análisis de suelo para ese lote y, por último, genera el plan de fertilización. Con esos tres pasos ya tienes todo el flujo básico.',
+                'El primer paso es crear al menos un lote con su nombre y área. Luego registras un análisis de suelo para ese lote y, por último, generas el plan de fertilización. Con esos tres pasos ya tienes todo el flujo básico.',
                 'Empieza por ir a la sección "Mis lotes" y crear un lote con nombre, área y ubicación. Después ve a "Análisis", vincula el análisis al lote y al final usa "Generar plan" para obtener el PDF.',
                 'Primero: registra tus lotes. Segundo: ingresa los análisis de suelo de laboratorio. Tercero: genera los planes de fertilización. Si me dices en qué paso estás, te guío con más detalle.',
             ],
@@ -40,8 +42,9 @@ return [
                 '¿Quieres que te envíe los pasos detallados para crear un lote nuevo ahora mismo?'
             ],
         ],
+
         'greeting' => [
-            'keywords' => ['hola', 'buenas', 'saludo', 'buen dia', 'buenas tardes', 'buenas noches', 'que mas', 'buenos dias'],
+            'keywords' => ['hola', 'buenas', 'saludo', 'buen dia', 'buenos dias', 'buenas tardes', 'buenas noches', 'que mas'],
             'responses' => [
                 'Hola productor, ¡qué gusto saludarte! ¿En qué puedo acompañarte hoy?',
                 '¡Qué alegría verte por aquí! Dime qué parte del sistema quieres que revisemos juntos.',
@@ -51,6 +54,7 @@ return [
                 'Recuerda que puedes preguntarme sobre registro, lotes, análisis de suelo o planes de fertilización.',
             ],
         ],
+
         'gratitude' => [
             'keywords' => ['gracias', 'muchas gracias', 'te agradezco', 'excelente', 'muy amable'],
             'responses' => [
@@ -59,6 +63,7 @@ return [
             ],
             'follow_up' => ['Si ya terminaste, recuerda generar y descargar tus planes actualizados.'],
         ],
+
         'farewell' => [
             'keywords' => ['chao', 'hasta luego', 'nos vemos', 'adios'],
             'responses' => [
@@ -67,30 +72,43 @@ return [
             ],
             'follow_up' => [],
         ],
+
         'registration_help' => [
             'keywords' => ['registr', 'crear usuario', 'nuevo usuario', 'darse de alta'],
             'responses' => [
-                'Para registrarte ingresa tu nombre completo (nombre y dos apellidos), tu documento y ocupación. El sistema genera una contraseña usando tu documento. Al iniciar sesión podrás cambiarla sin problema.',
+                'Para registrarte ingresa tu nombre completo (al menos un nombre y un apellido), tu documento y ocupación. El sistema genera una contraseña usando tu documento. Al iniciar sesión podrás cambiarla sin problema.',
                 'Ve a la opción "Registrarme", escribe tus datos personales y asegúrate de que el documento coincida con el que usarás para iniciar sesión. Estoy aquí por si se presenta algún bloqueo.',
             ],
             'follow_up' => ['Si tu correo es correcto, te enviaré los planes al instante cuando los generes.'],
         ],
+
         'login_help' => [
-            'keywords' => ['iniciar sesión', 'login', 'entrar', 'no puedo entrar', 'contraseña', 'clave'],
+            'keywords' => ['iniciar sesion', 'login', 'entrar', 'no puedo entrar', 'contraseña', 'clave'],
             'responses' => [
-                'Para iniciar sesión usa tu nombre completo como lo registraste (con dos apellidos) y el número de identificación. Si olvidaste la contraseña escribe a soporte@agroco.com y te ayudamos a restablecerla.',
+                'Para iniciar sesión usa tu nombre completo como lo registraste (al menos nombre y apellido) y el número de identificación. Si olvidaste la contraseña escribe a soporte@agroco.com y te ayudamos a restablecerla.',
                 'Si el sistema dice "credenciales inválidas", revisa que escribas el nombre sin abreviar y tu documento sin espacios. Tras varios intentos fallidos te bloqueamos por unos minutos para proteger tu cuenta.',
             ],
             'follow_up' => ['Cuando ingreses nuevamente verifica que tus planes estén actualizados.'],
         ],
+
         'email_verification' => [
             'keywords' => ['correo', 'verificar', 'email', 'no me llega', 'enviar correo'],
             'responses' => [
-                'Verifica tu correo: si aparece como pendiente, entra a tu perfil y actualízalo. Marca la casilla de verificación para recibir los planes automáticamente.',
+                'Verifica tu correo: si aparece como pendiente, entra a tu perfil y actualízalo. Cuando el correo está verificado, puedo enviarte los planes automáticamente.',
                 'Si no te llega el PDF, asegúrate de que tu correo esté verificado. Al generar un plan te aviso si el envío quedó pendiente.',
             ],
             'follow_up' => ['Puedes reenviar el plan descargando el PDF y compartiéndolo por WhatsApp.'],
         ],
+
+        'email_update_help' => [
+            'keywords' => ['actualizar correo', 'cambiar correo', 'actualizar email', 'actualizar gmail', 'cambiar gmail', 'editar correo'],
+            'responses' => [
+                'Para actualizar tu correo (por ejemplo tu Gmail) entra a la sección "Perfil". Edita el campo de email, guarda los cambios y listo: a partir de ahí usaremos esa dirección para enviarte los planes en PDF.',
+                'Si cambias de correo, recuerda revisar que esté bien escrito y que puedas recibir mensajes allí. El PDF del plan se enviará siempre al correo registrado en tu perfil.',
+            ],
+            'follow_up' => ['Si quieres, también puedes descargar el PDF desde la app y compartirlo por el canal que prefieras.'],
+        ],
+
         'lots_help' => [
             'keywords' => ['lote', 'campo', 'predio', 'crear lote', 'actualizar lote', 'area', 'área', 'hectarea', 'hectareas'],
             'responses' => [
@@ -99,6 +117,7 @@ return [
             ],
             'follow_up' => ['Cuando completes el lote pasa a registrar el análisis de suelo para activar las recomendaciones.'],
         ],
+
         'analyses_help' => [
             'keywords' => ['analisis', 'análisis', 'laboratorio', 'suelo', 'nutrientes'],
             'responses' => [
@@ -107,27 +126,48 @@ return [
             ],
             'follow_up' => ['Cuando tengas el informe, ingresa cada nutriente para generar el plan actualizado.'],
         ],
+
         'plan_generation' => [
-            'keywords' => ['plan', 'fertilizacion', 'fertilización', 'generar plan', 'recomendacion', 'recomendación'],
+            'keywords' => [
+                'plan', 'fertilizacion', 'fertilización', 'generar plan', 'recomendacion', 'recomendación',
+                'descargar pdf', 'descargo el pdf', 'como descargo el pdf', 'donde esta el pdf', 'pdf del plan'
+            ],
             'responses' => [
                 'Una vez registres el análisis, abre la tarjeta y pulsa "Generar plan". Calculamos las dosis y te preparamos el PDF con recomendaciones por hectárea.',
                 'Si modificas un análisis, vuelve a generar el plan para actualizar las dosis y la descarga. Así mantienes a tu equipo sincronizado.',
+                'Para descargar el PDF entra al detalle del análisis que ya tiene plan, busca el botón "Descargar PDF" y ábrelo. Si tu correo está verificado, también te llega una copia por email.',
             ],
             'follow_up' => ['Verifica que tu correo esté verificado si necesitas recibir el PDF automáticamente.'],
         ],
-        'navigation_help' => [
-            'keywords' => ['donde esta', 'no encuentro', 'menú', 'navegar', 'pantalla'],
+
+        'fertilizer_explanation' => [
+            'keywords' => [
+                'para que sirven los fertilizantes', 'para que sirve ese fertilizante',
+                'que es la urea', 'para que sirve la urea',
+                'para que sirve el dap', 'para que sirve el kcl',
+                'fuentes de nutrientes', 'que significan los productos del plan'
+            ],
             'responses' => [
-                'En la app, abajo encuentras las pestañas principales: Lotes, Análisis y Planes. Usa el botón "+" para agregar registros.',
+                'Cada fertilizante del plan aporta nutrientes específicos: la urea aporta Nitrógeno (N) para el crecimiento de la planta; el DAP aporta N y sobre todo Fósforo (P₂O₅) para raíces y macollamiento; el KCl aporta Potasio (K₂O) para llenado de grano y resistencia al acame; el sulfato de amonio aporta Nitrógeno y Azufre (S); y las enmiendas como yeso, cal o dolomita ayudan a corregir Ca y Mg y mejorar la estructura del suelo.',
+                'Piensa en los fertilizantes como cajas de nutrientes: cada producto del plan tiene una función (N, P, K, S, Ca, Mg o micronutrientes como Zn, B, Mn). El sistema ya calculó las dosis, así que solo debes seguir las cantidades y fases indicadas en el PDF.',
+            ],
+            'follow_up' => ['Si me dices el nombre de un fertilizante específico (urea, DAP, KCl, yeso, etc.) puedo contarte qué rol cumple en el cultivo de arroz.'],
+        ],
+
+        'navigation_help' => [
+            'keywords' => ['donde esta', 'no encuentro', 'menu', 'menú', 'navegar', 'pantalla'],
+            'responses' => [
+                'En la app, arriba encuentras el menú para ir a Inicio, Perfil y salir. Desde el inicio puedes entrar a "Mis lotes" y "Análisis" para manejar tu información.',
                 'Si trabajas desde la web, el menú lateral te deja pasar de lotes a análisis en un clic. Yo puedo guiarte paso a paso si me cuentas qué buscas.',
             ],
             'follow_up' => ['¿Quieres que te envíe los pasos para crear un lote o registrar un análisis?'],
         ],
+
         'password_reset' => [
-            'keywords' => ['olvidé la contraseña', 'restablecer clave', 'recuperar password'],
+            'keywords' => ['olvide la contraseña', 'olvidé la contraseña', 'restablecer clave', 'recuperar password'],
             'responses' => [
-                'En la pantalla de inicio de sesión selecciona "Recuperar contraseña". Si no aparece, escríbenos a soporte@agroco.com y te ayudamos a restablecerla.',
-                'Por seguridad, la contraseña temporal caduca en poco tiempo. Cámbiala apenas ingreses de nuevo.',
+                'Si olvidaste la contraseña, en la pantalla de inicio de sesión selecciona "Recuperar contraseña" (si está disponible) o escríbenos a soporte@agroco.com y te ayudamos a restablecerla.',
+                'Por seguridad, cualquier contraseña temporal debe cambiarse apenas ingreses de nuevo. Elige una clave que no sea igual a tu documento.',
             ],
             'follow_up' => ['Guarda tu nueva contraseña y evita compartirla.'],
         ],
@@ -140,3 +180,4 @@ return [
         '¿Te refieres a registro, análisis, plan o almacenamiento? Dame una pista y te respondo mejor.',
     ],
 ];
+

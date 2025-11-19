@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+﻿import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
@@ -205,7 +205,7 @@ import { AuthService } from '../services/auth.service';
         <div class="floating-layers">
           <form class="form-shell" (ngSubmit)="onSave()">
             <div class="form-title">Editar perfil</div>
-            <div class="form-sub">Actualiza tu foto y correo electrónico.</div>
+            <div class="form-sub">Actualiza tu foto y correo electrénico.</div>
 
             <div class="row" style="align-items:center; gap:12px; display:none">
               <div class="avatar-circle avatar-lg">
@@ -252,7 +252,7 @@ import { AuthService } from '../services/auth.service';
     </ng-container>
 
     <ng-template #guest>
-      <div class="empty-state">Debes iniciar sesión para consultar tu perfil.</div>
+      <div class="empty-state">Debes iniciar sesi├│n para consultar tu perfil.</div>
     </ng-template>
   `
 })
@@ -299,7 +299,7 @@ export class ProfilePageComponent {
     try {
       await this.auth.updatePhoto(file);
       this.photoFile = null;
-      // Mantenemos el preview para que visualmente no “vuelva” a la anterior
+      // Mantenemos el preview para que visualmente no ÔÇ£vuelvaÔÇØ a la anterior
       this.msg = 'Foto actualizada';
     } catch (err: any) {
       this.error = err?.error?.message || err?.message || 'No se pudo actualizar la foto';
@@ -312,10 +312,47 @@ export class ProfilePageComponent {
     if (!this.auth.token()) return;
     this.busy = true; this.msg = null; this.error = null;
     try {
+      const ocupRaw = (this.ocupacion ?? '').trim();
+      const telRaw = (this.telefono ?? '').trim();
+      const emailRaw = (this.email ?? '').trim();
+
+      if (ocupRaw) {
+        if (ocupRaw.length < 3) {
+          this.error = 'La ocupación debe tener al menos 3 caracteres.';
+          this.busy = false;
+          return;
+        }
+        if (/\d/.test(ocupRaw)) {
+          this.error = 'La ocupación no debe contener números. Escribe solo letras, por ejemplo: Agricultor.';
+          this.busy = false;
+          return;
+        }
+      }
+
+      let telefonoNormalizado: string | null = null;
+      if (telRaw) {
+        const digits = telRaw.replace(/\D/g, '');
+        if (digits.length !== 10) {
+          this.error = 'El teléfono debe tener exactamente 10 dígitos. Ejemplo: 3001234567.';
+          this.busy = false;
+          return;
+        }
+        telefonoNormalizado = digits;
+      }
+
+      if (emailRaw) {
+        const emailRegex = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+        if (!emailRegex.test(emailRaw)) {
+          this.error = 'Ingresa un correo electrónico válido. Ejemplo: agricultor@correo.com.';
+          this.busy = false;
+          return;
+        }
+      }
+
       await this.auth.updateProfile({
-        ocupacion: this.ocupacion ?? undefined,
-        telefono: this.telefono ?? undefined,
-        email: this.email ?? undefined,
+        ocupacion: ocupRaw || undefined,
+        telefono: telefonoNormalizado ?? undefined,
+        email: emailRaw || undefined,
       });
       if (this.photoFile) {
         await this.auth.updatePhoto(this.photoFile);
@@ -337,3 +374,4 @@ export class ProfilePageComponent {
     return (first + second).toUpperCase();
   }
 }
+

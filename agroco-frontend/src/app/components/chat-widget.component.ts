@@ -90,7 +90,187 @@ type ChatHistoryItem = { role: string; message: string; created_at?: string };
     >
       <img [src]="open() ? 'assets/GranoDeArroz.webp' : 'assets/GranoDeArrozCentado.webp'" alt="Agro - asistente" class="mascot-img" />
     </button>
-  `
+  `,
+  styles: [`
+    .chat-panel{
+      position: fixed;
+      bottom: 88px;
+      right: 16px;
+      left: auto;
+      width: 360px;
+      max-width: calc(100vw - 32px);
+      border-radius: 22px;
+      box-shadow: 0 18px 40px rgba(0,0,0,0.35);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      font-family: 'Outfit', system-ui, -apple-system, Segoe UI, sans-serif;
+      background: #0f172a;
+    }
+    .chat-panel.left{
+      left: 16px;
+      right: auto;
+    }
+    .chat-header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding: 10px 14px;
+      background: linear-gradient(135deg,#15803d,#166534);
+      color:#f9fafb;
+      font-size:17px;
+      font-weight:800;
+    }
+    .chat-header-title{
+      flex:1;
+      text-align:center;
+      font-size:17px;
+      letter-spacing:.02em;
+    }
+    .chat-header--agro .chat-brand img{
+      width:52px;
+      height:52px;
+    }
+    .chat-close{
+      border:none;
+      background:transparent;
+      color:#f9fafb;
+      font-size:22px;
+      width:32px;
+      height:32px;
+      border-radius:999px;
+      cursor:pointer;
+    }
+    .chat-body{
+      flex:1;
+      padding: 12px 10px;
+      background: url('/assets/FondoChatBot.png') center/cover no-repeat, #020617;
+      overflow-y:auto;
+      font-size:15px;
+    }
+    .msg-row{
+      display:flex;
+      gap:8px;
+      margin-bottom:10px;
+    }
+    .msg-row.user{
+      justify-content:flex-end;
+    }
+    .avatar{
+      width:52px;
+      height:52px;
+      border-radius:50%;
+      flex-shrink:0;
+    }
+    .msg{
+      max-width: 82%;
+      padding:10px 12px;
+      border-radius:18px;
+      line-height:1.4;
+      font-size:15px;
+    }
+    .msg.bot{
+      background: #14532d; /* verde oscuro sólido */
+      border: 1px solid #16a34a;
+      color:#f9fafb;
+    }
+    .msg.user{
+      background: #15803d; /* verde algo más claro pero sólido */
+      color:#ecfdf3;
+    }
+    .msg-text{
+      display:block;
+      white-space:pre-line;
+    }
+    .msg-meta{
+      display:flex;
+      justify-content:flex-end;
+      gap:4px;
+      margin-top:4px;
+      font-size:11px;
+      opacity:.85;
+    }
+    .chat-status{
+      padding:4px 10px;
+      font-size:12px;
+      color:#f97316;
+      background:#0b1120;
+    }
+    .chat-input{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 10px 10px;
+      background: #020617;
+      border-top:1px solid rgba(148,163,184,0.4);
+    }
+    .chat-input .input{
+      flex:1;
+      border-radius:999px;
+      border:1px solid rgba(148,163,184,0.8);
+      padding:10px 14px;
+      font-size:15px;
+      outline:none;
+      background:#020617;
+      color:#e5e7eb;
+    }
+    .chat-input .input::placeholder{
+      color:#6b7280;
+    }
+    .chat-input .btn{
+      border:none;
+      border-radius:999px;
+      padding:9px 16px;
+      font-size:15px;
+      font-weight:700;
+      background: linear-gradient(135deg,#22c55e,#16a34a);
+      color:#022c22;
+      cursor:pointer;
+    }
+    .chat-input .btn:disabled{
+      opacity:.5;
+      cursor:not-allowed;
+    }
+    .chat-guest-hint{
+      margin-top:6px;
+      font-size:13px;
+      color:#f97316;
+    }
+    .chat-mascot-btn{
+      position: fixed;
+      bottom: 18px;
+      right: 18px;
+      border:none;
+      padding:0;
+      background:transparent;
+      box-shadow:none;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .chat-mascot-btn.left{
+      left:18px;
+      right:auto;
+    }
+    .mascot-img{
+      width:88px;
+      height:88px;
+      display:block;
+    }
+    @media (max-width: 480px){
+      .chat-panel{
+        right: 10px;
+        left: 10px;
+        width: auto;
+        bottom: 80px;
+      }
+      .mascot-img{
+        width:76px;
+        height:76px;
+      }
+    }
+  `]
 })
 export class ChatWidgetComponent {
   @ViewChild('body') body?: ElementRef<HTMLDivElement>;

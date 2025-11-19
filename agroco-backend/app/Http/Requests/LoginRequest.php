@@ -59,10 +59,10 @@ class LoginRequest extends FormRequest
             $fullName = (string) $this->input('nombre_completo');
             $parts = array_values(array_filter(explode(' ', $fullName)));
 
-            if (count($parts) < 3) {
+            if (count($parts) < 2) {
                 $validator->errors()->add(
                     'nombre_completo',
-                    'El nombre completo debe incluir por lo menos un nombre y dos apellidos.'
+                    'El nombre completo debe incluir por lo menos un nombre y un apellido.'
                 );
             }
         });

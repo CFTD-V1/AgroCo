@@ -92,6 +92,7 @@ import { AuthService } from '../services/auth.service';
     .auth-input { appearance: none; border: 0 !important; background: transparent !important; outline: none; width: 100%; min-height: 48px; font-size: 15px; color: #1f3526; }
     .auth-input::placeholder { color: #9ab0a3; }
     .field-error { color: #b64040; font-weight: 600; }
+    .auth-error { margin-top: 6px; color: #b64040; font-weight: 600; }
     .auth-big-cta { width: 100%; border: 0; border-radius: 999px; padding: 14px 20px; font-weight: 800; font-family: 'Outfit', 'Plus Jakarta Sans', system-ui, sans-serif; letter-spacing: 0.2px; color: #fff; background: linear-gradient(135deg, #2f8f3d 0%, #1f5f3a 100%); box-shadow: 0 16px 28px rgba(21,62,41,0.22); cursor: pointer; transition: transform .15s ease, box-shadow .15s ease; }
     .auth-big-cta:hover { transform: translateY(-2px); box-shadow: 0 20px 34px rgba(21,62,41,0.26); }
     .auth-big-cta:disabled { opacity: .6; cursor: not-allowed; transform: none; box-shadow: 0 8px 16px rgba(21,62,41,0.18); }
@@ -142,4 +143,3 @@ export class RegisterPageComponent {
     if (el.value !== cleaned) el.value = cleaned;
   }
 }
-
