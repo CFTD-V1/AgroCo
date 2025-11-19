@@ -20,6 +20,7 @@ export class AppComponent {
   menuOpen = false;
   isHomeRoute = true;
   isAuthRoute = false;
+  isAdminRoute = false;
 
   constructor(public auth: AuthService, private router: Router) {
     this.setHomeFlag(this.router.url);
@@ -32,6 +33,7 @@ export class AppComponent {
     const normalized = url.split('?')[0];
     this.isHomeRoute = normalized === '/' || normalized === '';
     this.isAuthRoute = normalized === '/login' || normalized === '/register';
+    this.isAdminRoute = normalized.startsWith('/admin');
   }
 
   toggleMenu() {

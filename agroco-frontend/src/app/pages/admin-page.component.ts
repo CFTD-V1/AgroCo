@@ -108,7 +108,7 @@ function defaultUserForm() {
     </section>
 
     <section class="panel-grid">
-      <div class="panel-card">
+      <div class="panel-card analysis-card">
         <div class="panel-header">
           <div>
             <div class="panel-title">{{ editingUserId() ? 'Editar usuario' : 'Crear usuario' }}</div>
@@ -190,7 +190,7 @@ function defaultUserForm() {
         </form>
       </div>
 
-      <div class="panel-card">
+      <div class="panel-card analysis-card">
         <div class="panel-header">
           <div>
             <div class="panel-title">Usuarios registrados</div>
@@ -335,49 +335,57 @@ function defaultUserForm() {
   `,
   styles: [`
     .admin-hero { background: linear-gradient(120deg, #0f5132, #0c7c59); color:#fff; padding:24px; border-radius:20px; box-shadow:0 16px 40px rgba(12,124,89,0.35); margin-bottom:18px; }
-    .hero-copy { max-width:820px; }
+    .hero-copy { max-width:820px; margin:0 auto; text-align:center; }
     .tagline { display:inline-flex; padding:6px 12px; background:rgba(255,255,255,0.16); border-radius:999px; font-weight:700; letter-spacing:.3px; }
-    .hero-title { margin:10px 0 8px; font-size:32px; line-height:1.2; }
-    .hero-subtitle { margin:0; color:rgba(255,255,255,0.88); font-size:16px; }
+    .hero-title { margin:10px 0 8px; font-size:32px; line-height:1.2; color:#fff; }
+    .hero-subtitle { margin:0; color:#fff; font-size:16px; }
 
     .stat-section { margin: 10px 0 24px; }
-    .stat-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:12px; }
-    .stat-card { padding:16px; border-radius:14px; background:#f7fdf9; border:1px solid #d5f2e3; box-shadow:0 10px 30px rgba(12,124,89,0.08); }
+    .stat-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:14px; }
+    .stat-card { padding:18px; border-radius:14px; background:#f7fdf9; border:1px solid #d5f2e3; box-shadow:0 10px 30px rgba(12,124,89,0.08); }
     .stat-card .stat-label { font-size:13px; color:#0c7c59; font-weight:700; text-transform:uppercase; letter-spacing:.3px; }
     .stat-card .stat-value { font-size:30px; font-weight:900; margin:6px 0; color:#0f5132; }
     .stat-card .stat-sub { color:#0f5132; opacity:0.8; font-weight:600; }
     .skeleton { background: linear-gradient(90deg, #eef3f0, #f7faf8, #eef3f0); background-size:200% 200%; animation:pulse 1.6s ease-in-out infinite; min-height:94px; }
     @keyframes pulse { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position:0% 50%; } }
 
-    .panel-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap:16px; margin: 12px 0 28px; }
-    .panel-card { background:#fff; border:1px solid #e5ece7; border-radius:14px; padding:16px; box-shadow:0 14px 36px rgba(0,0,0,0.06); }
+    .panel-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap:18px; margin: 12px 0 28px; width:100%; }
+    .panel-card { background:#fff; border:1px solid #e5ece7; border-radius:14px; padding:10px; box-shadow:0 14px 32px rgba(0,0,0,0.08); min-height:480px; }
     .panel-header { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:10px; flex-wrap:wrap; }
     .panel-title { font-weight:800; font-size:18px; color:#0f5132; }
     .panel-sub { color:#4b6355; font-size:13px; }
-    .form-shell { background:#f9fbf7; border:1px solid #e5ece7; border-radius:12px; padding:12px; }
-    .row { display:flex; gap:12px; flex-wrap:wrap; }
-    .row .col { flex:1; min-width:180px; }
-    label { font-size:12px; font-weight:700; color:#0f5132; display:block; margin-bottom:4px; }
-    .input { width:100%; border:1px solid #cfe1d5; border-radius:10px; padding:10px 12px; outline:none; font-size:14px; }
+    .analysis-card { background: linear-gradient(180deg, rgba(255,255,255,0.95), #f8fff9); border-color:#cfe7d9; }
+    .analysis-card .panel-header { gap:6px; }
+    .analysis-card .panel-title { font-size:22px; }
+    .analysis-card .panel-sub { font-size:15px; color:#557d64; }
+    .form-shell { background:#fff; border:1px solid #d1e1d5; border-radius:16px; padding:16px; gap:14px; box-shadow: inset 0 0 0 1px rgba(12,124,89,0.06); }
+    .row { display:flex; gap:16px; flex-wrap:wrap; }
+    .row .col { flex:1; min-width:200px; }
+    label { font-size:13px; font-weight:700; color:#0f5132; display:block; margin-bottom:6px; }
+    .input { width:100%; border:1px solid #cfe1d5; border-radius:12px; padding:14px 16px; outline:none; font-size:15px; background:#f9fdf8; min-height:56px; }
     .input:focus { border-color:#0c7c59; box-shadow:0 0 0 2px rgba(0,124,89,0.15); }
     .actions { display:flex; gap:8px; margin-top:10px; }
-    .btn { background:#0c7c59; color:#fff; border:none; border-radius:10px; padding:10px 14px; cursor:pointer; font-weight:800; }
+    .btn { background:#0c7c59; color:#fff; border:none; border-radius:14px; padding:20px 32px; min-height:60px; cursor:pointer; font-weight:800; font-size:16px; letter-spacing:.5px; }
     .btn:hover { filter:brightness(0.95); }
     .btn:disabled { opacity:0.6; cursor:not-allowed; }
-    .btn-secondary { background:#eef3f0; color:#0f5132; border:1px solid #cfe1d5; }
+    .btn-secondary { background:#eef3f0; color:#0f5132; border:1px solid #cfe1d5; font-weight:700; padding:16px 28px; min-height:54px; border-radius:14px; }
     .link-btn { background:transparent; border:none; color:#0c7c59; font-weight:800; cursor:pointer; padding:6px 8px; }
     .link-btn.danger { color:#c53030; }
     .link-btn.disabled { color:#b8c3bb; cursor:not-allowed; }
 
     .data-table { width:100%; border-collapse:collapse; }
-    .data-table th, .data-table td { text-align:left; padding:10px 8px; border-bottom:1px solid #eef3f0; }
-    .data-table th { font-size:12px; letter-spacing:.3px; text-transform:uppercase; color:#4b6355; }
-    .data-table td { font-size:14px; color:#1b3525; }
+    .analysis-card .data-table th, .analysis-card .data-table td { text-align:left; padding:18px 14px; border-bottom:1px solid #edf3ef; }
+    .data-table th, .data-table td { text-align:left; padding:14px 10px; border-bottom:1px solid #eef3f0; }
+    .analysis-card .data-table th { font-size:14px; letter-spacing:.2px; text-transform:uppercase; color:#4d7c63; }
+    .analysis-card .data-table td { font-size:16px; color:#1d3b2c; }
+    .data-table th { font-size:13px; letter-spacing:.3px; text-transform:uppercase; color:#4b6355; }
+    .data-table td { font-size:15px; color:#1b3525; }
+    .analysis-card .table-wrapper { overflow:auto; border-radius:16px; background:#fff; border:1px solid #dff1e1; box-shadow: inset 0 0 0 1px rgba(94,146,110,0.12); max-height:320px; }
     .table-wrapper { overflow:auto; border-radius:10px; background:#fbfdfc; border:1px solid #eef3f0; }
     .table-empty { padding:14px; text-align:center; color:#6b7c70; }
     .skeleton-row { height:48px; background: linear-gradient(90deg,#eef3f0,#f7faf8,#eef3f0); animation:pulse 1.6s ease-in-out infinite; border-radius:8px; margin-top:8px; }
 
-    .search { min-width:220px; }
+    .search { min-width:320px; padding:18px 22px; font-size:16px; min-height:62px; border-radius:14px; }
     .pill { display:inline-flex; align-items:center; padding:4px 10px; border-radius:999px; font-weight:800; font-size:12px; }
     .pill-admin { background:#0c7c59; color:#fff; }
     .pill-user { background:#e4f3eb; color:#0f5132; }
@@ -385,7 +393,8 @@ function defaultUserForm() {
     .actions-cell { display:flex; gap:6px; justify-content:flex-end; }
     .toggle { display:flex; align-items:center; gap:8px; font-size:13px; color:#1b3525; }
     .toggles { display:flex; flex-direction:column; gap:8px; justify-content:center; }
-    .pager { display:flex; align-items:center; justify-content:space-between; margin-top:12px; gap:8px; flex-wrap:wrap; color:#0f5132; font-weight:700; }
+    .analysis-card .pager { display:flex; align-items:center; justify-content:space-between; margin-top:16px; gap:12px; flex-wrap:wrap; color:#0f5132; font-weight:700; background:#f0f8ef; border-radius:14px; padding:12px 18px; }
+    .pager { display:flex; align-items:center; justify-content:space-between; margin-top:16px; gap:12px; flex-wrap:wrap; color:#0f5132; font-weight:700; }
     .table-wrapper table { min-width: 100%; }
 
     .modal-backdrop { position:fixed; inset:0; background:rgba(12,12,12,0.45); display:flex; align-items:center; justify-content:center; z-index:30; padding:12px; }

@@ -86,5 +86,5 @@
   <router-outlet />
 </main>
 
-<app-chat-widget *ngIf="auth.token()" />
+<app-chat-widget *ngIf="auth.token() && !isAdminRoute" />
 <app-toast-container />
