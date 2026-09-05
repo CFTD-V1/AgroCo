@@ -69,53 +69,42 @@ class StoreUserRequest extends FormRequest
 
             $parts = array_values(array_filter(explode(' ', $fullName)));
 
-            // Al menos nombre + un apellido
-            if (count($parts) < 2) {
+            // Al menos nombre + dos apellidos
+            if (count($parts) < 3) {
                 $validator->errors()->add(
                     'nombre_completo',
-                    'Indica al menos un nombre y un apellido.'
+                    'Indica al menos un nombre y dos apellidos.'
                 );
             } else {
-                // Primer apellido obligatorio, segundo apellido opcional
-                $primerApellido = null;
-                $segundoApellido = null;
+                // Primer y segundo apellido obligatorios
+                $primerApellido = $parts[count($parts) - 2] ?? null;
+                $segundoApellido = $parts[count($parts) - 1] ?? null;
 
-                if (count($parts) === 2) {
-                    // Ej: "Cristian Tafur" => primer apellido = Tafur
-                    $primerApellido = $parts[1];
-                } elseif (count($parts) >= 3) {
-                    // Ej: "Cristian David Tafur Lopez" => Tafur (primer), Lopez (segundo)
-                    $primerApellido = $parts[count($parts) - 2] ?? null;
-                    $segundoApellido = $parts[count($parts) - 1] ?? null;
-                }
-
-                if ($primerApellido === null) {
+                if ($primerApellido === null || $segundoApellido === null) {
                     $validator->errors()->add(
                         'nombre_completo',
-                        'No se pudo identificar un apellido válido.'
+                        'No se pudo identificar ambos apellidos válidos.'
                     );
                 } else {
                     if (Str::length($primerApellido) < 2) {
                         $validator->errors()->add(
                             'nombre_completo',
-                            'El apellido debe tener al menos dos caracteres.'
+                            'El primer apellido debe tener al menos dos caracteres.'
                         );
                     }
 
-                    if ($segundoApellido !== null) {
-                        if (Str::length($segundoApellido) < 2) {
-                            $validator->errors()->add(
-                                'nombre_completo',
-                                'Cada apellido debe tener al menos dos caracteres.'
-                            );
-                        }
+                    if (Str::length($segundoApellido) < 2) {
+                        $validator->errors()->add(
+                            'nombre_completo',
+                            'El segundo apellido debe tener al menos dos caracteres.'
+                        );
+                    }
 
-                        if (Str::lower($primerApellido) === Str::lower($segundoApellido)) {
-                            $validator->errors()->add(
-                                'nombre_completo',
-                                'Los apellidos no pueden ser idénticos.'
-                            );
-                        }
+                    if (Str::lower($primerApellido) === Str::lower($segundoApellido)) {
+                        $validator->errors()->add(
+                            'nombre_completo',
+                            'Los apellidos no pueden ser idénticos.'
+                        );
                     }
                 }
             }
